@@ -1,11 +1,93 @@
-# Hirarki UI
+# Audit UI — Fase 0
 
-Tema, font, ilustrasi dan token warna coquette yang ada tetap dipertahankan. Override CSS menetapkan satu hero visual per tampilan, kartu aksi sebagai tingkat primary, dan panel ringkasan/media sebagai quiet tanpa shadow berat. Banner mode siklus/rescue tetap tampil sesuai status aktif yang ditentukan state; ornamen penuh tidak ditambahkan lagi.
+Branch: `redesign-minimal`. Audit dilakukan tanpa mengubah markup, CSS, atau perilaku aplikasi. Jumlah pemakaian di bawah menghitung kemunculan pada atribut `class` dalam template sumber `public/legacy-app.js` dan shell `index.html`; satu template di dalam loop dapat menghasilkan beberapa elemen saat runtime.
 
-## Prioritas per tab
+## SEBELUM: lokasi markup dan styling
 
-Beranda mempertahankan gallery wall sebagai hero, memindahkan banner siklus/rescue aktif tepat setelahnya, lalu menempatkan check-in dan ritual harian sebelum pintasan, bisikan, dan ringkasan pendukung. Perjalanan menampilkan peta/progres pertama; Aktivitas menampilkan tindakan utama sebelum pustaka/media; Diary & Lemari menampilkan check-in/jurnal sebelum galeri/arsip; Profil menampilkan ringkasan diri/pengaturan sebelum keepsake. Tiga tab terakhir mengikuti urutan prioritas sumbernya; renderer memberi satu hero, hingga dua primary, dan quiet untuk blok sisanya.
+| Area | Lokasi | Tanggung jawab saat ini |
+|---|---|---|
+| Shell HTML | `index.html` | `.wrap`, `.heart-lace`, masthead, `#main`, `#nav`, `#quiet-rail`, dialog/sheet, empat file input, toast. Masih ada `<title>`, font link, dan viewport-fit meta duplikat di `<body>`, serta reset inline yang mengatur warna/font dasar sendiri. |
+| State dan renderer legacy | `public/legacy-app.js` | `render()` memilih `vToday`, `vJourney`, `vAct`, `vJournal`, atau `vMe` untuk lima tab. Template HTML disusun sebagai string pada fungsi-fungsi ini dan helper render kartu. `applyCardHierarchy()` kemudian menebak hero dari class pertama yang cocok, memindah banner aktif, lalu menetapkan primary/quiet. |
+| CSS utama | `src/styles/app.css` | Token tema, tipografi, layout komponen lama, banyak varian kartu, dark mode, navigasi, dan media query desktop/mobile. |
+| Override saat ini | `src/styles/minimal.css` | Aturan minimalis yang menimpa beberapa dekorasi dan permukaan kartu; masih bergantung pada selector/markup lama. |
+| Gaya fungsi tambahan | `src/styles/auth-screen.css`, `src/styles/sync-status.css` | Layar login/impor dan indikator sinkronisasi. |
 
-Pada layar lebar (1024px ke atas), bottom navigation menjadi sidebar kiri. Konten aplikasi berada di kolom tengah (maksimum 720px), dengan rel kanan berisi hari/streak, checklist singkat, dan keepsake terbaru sebagai informasi quiet. Kolom akan menyusut pada viewport desktop yang sempit; body menahan overflow horizontal.
+### Inventaris class visual
 
-Kontrol utama diberi tinggi minimum 44px, safe area iOS dipertahankan, dan animasi `cf-*` mematuhi `prefers-reduced-motion`.
+Hitungan adalah jumlah titik deklarasi template, bukan jumlah item yang muncul bila markup dibuat dari `.map()`/loop.
+
+| Class/varian | Pemakaian template | Catatan bentuk saat ini |
+|---|---:|---|
+| `card` | 36 | Kelas dasar paling sering; bobotnya bercampur antara form, konten, ringkasan, dan daftar. |
+| `card paper` | 7 | Grid kertas / tekstur, sebagian dengan `washi`. |
+| `card soft` | 3 | Latar blush tambahan. Subset dari 36 pemakaian `card`. |
+| `coq-frame` | 3 | Bingkai dekoratif berscaffold. |
+| `boutique-wall` | 1 | Gallery wall dan cover Muse di Beranda. |
+| `notebook-card` | 1 | Reminder/notebook strip di Beranda. |
+| `fxc` | 1 | Varian katalog/flow Aktivitas. |
+| `mirror-card` | 2 | Slot produk/Lookbook; satu titik template dapat berulang untuk item. |
+| `media-card-vis` | 2 | Kartu media visual; satu titik template dapat berulang untuk item. |
+| `wardrobe-box` | 1 | Wadah Lemari/Lookbook di Diary. |
+| `spa-card` | 1 | Menu Salon & Spa. |
+| `cycle-banner`, `rescue-banner` | masing-masing 1 | Banner status bersyarat; dikeluarkan hanya ketika kondisinya aktif. |
+| `obj-btn` | 4 | Empat pintasan Beranda dengan ilustrasi. |
+| `whisper`, `nx` | masing-masing 1 | Bisikan/fakta dan kartu saran berikutnya. |
+| `boutique-hdr` | 25 | Header dekoratif di banyak panel. |
+| `washi` | 6 | Tape dekoratif pada formulir/kartu. |
+| `scallop-oval` | 2 | Crest/scallop pada beberapa ringkasan. |
+| `lace-bar` | 3 | Pemisah dekoratif. |
+| `heart-lace` | 1 di shell | Deret hati di atas halaman. |
+| `masthead`, `mast-brand`, `mast-crest`, `mast-title`, `mast-sub` | masing-masing 1 di shell | Crest dan brand header; tombol tema juga berada di masthead. |
+
+Kelas `media-card` tanpa akhiran tidak ditemukan sebagai varian markup; kelas yang dipakai adalah `media-card-vis`. `scallop` dipakai sebagai bagian dari `scallop-oval`, bukan class mandiri. Ada pula komponen visual lain seperti `mini-frame`, `center-portrait`, `portrait-ribbon`, `boutique-hdr`, `jar-box`, `map`, `stamp-grid`, dan `quiet-card` yang perlu ditinjau saat fase desain tiap tab.
+
+## Pemetaan blok layar yang diusulkan
+
+Tier mengacu pada rancangan di prompt dan dua artboard pada PDF. Tier belum diterapkan; ini usulan audit untuk disetujui sebelum fase implementasi.
+
+| Tab / blok yang ada | Tier usulan | Alasan / catatan |
+|---|---|---|
+| **Beranda** — cover Muse, hari berjalan, motto, streak, chapter, progress, tombol mulai ritual | Hero | Ringkasan hari adalah fokus halaman. Pertahankan foto Muse yang sudah ada, tetapi tampilkan tanpa bingkai/ornamen lama. |
+| **Beranda** — checklist ritual yang saat ini dihasilkan di `vToday()` dari `p.q.main` dan bonus opsional | Primary | Aksi inti dan interaksi centang. Validasi “n dari 5” terhadap daftar ritual aktual diperlukan karena jumlah ritual dapat berubah oleh state/fitur yang ada. |
+| **Beranda** — banner mode siklus/rescue saat aktif | Primary status | Tampil hanya bila aktif, tepat di bawah hero; banner nonaktif memang tidak dirender. |
+| **Beranda** — check-in, fakta/bisikan, toples, saran berikutnya, spa, pintasan, nook, aura, catatan kulit | Quiet | Informasi dan alat pendukung. Urutan mobile mengikuti aksi utama. Check-in tetap punya kontrol aktif dan perlu mempertahankan semua handler-nya. |
+| **Perjalanan** — ringkasan 30 hari / tanggal dan chapter terpilih | Hero | Mengikat peta perjalanan ke hari yang dipilih tanpa mengganti perhitungan `active()`, `prog()`, atau `phase()`. Detail tampilan ringkasan perlu disetujui. |
+| **Perjalanan** — peta 30 hari per chapter, pilih hari, fokus hari terpilih, daftar kebiasaan | Primary | Navigasi dan tindakan inti tab; seleksi hari harus tetap memakai `setSel()`. Fokus hari dan daftar bisa dikelompokkan sesuai urutan visual tanpa mengubah aturan. |
+| **Perjalanan** — toples bukti, teks milestone/achievement, catatan pelengkap | Quiet | Riwayat/dukungan; jangan mengulang statistik yang sama di hero dan rail. |
+| **Aktivitas** — pemilih subtab Katalog, Media, Etalase Rak, Postur | Navigasi/kontrol | Empat subtab memetakan ke renderer berbeda (`vFx`, `vMedia`, `vSkin`, `vBody`); jangan diperlakukan sebagai kartu dekoratif. |
+| **Aktivitas** — konten utama dari subtab terpilih | Primary | Tindakan bergantung subtab. Belum ada satu blok ringkasan yang jelas untuk dipakai sebagai hero pada semua empat subtab; jangan mengarang hero bersama. |
+| **Aktivitas** — riwayat, katalog/media lain, statistik, detail pendamping | Quiet | Konten penjelas/arsip setelah aksi terpilih. Pengelompokan rinci per subtab ditandai perlu audit Fase 3. |
+| **Diary** — form mood/energi, prompt harian, jurnal, syukur/keinginan | Primary | Area input inti dengan autosave (`auto()`) dan indikator `#sv`. `dayNav()` memberi konteks tanggal, bukan kartu dekoratif. |
+| **Diary** — ulasan mingguan dan surat akhir hari 30 | Primary sekunder / quiet | Form masih bisa diedit, namun frekuensi lebih rendah; posisikan setelah jurnal dan jangan mencampur dengan arsip. Detail tier per status hari 30 ditinjau pada Fase 3. |
+| **Diary** — toples, nook/buku, Lemari & Lookbook, foto progres, arsip penampilan | Quiet | Koleksi pendukung dan arsip. Foto Lookbook harus mempertahankan `editLookSlot()` dan input `#lookPhIn`. |
+| **Profil — Keepsakes** — aura/character sheet | Hero kandidat | Ringkasan profil yang sudah tersedia. Pastikan tidak menjadi hero berulang ketika subtab Profil berubah. |
+| **Profil — Keepsakes** — pencapaian dan hadiah | Quiet | Koleksi/riwayat; aksi klaim hadiah tetap `claim()`. |
+| **Profil — Jadwal & KRS** — `planCard()` dan jadwal mingguan | Primary | Form pengaturan rutinitas yang dipakai lintas aplikasi; perlu mempertahankan kontrol jadwal. |
+| **Profil — Pengaturan** — tanggal mulai, preferensi, tema, ekspor/impor, reset | Primary terpisah per grup | Pengaturan dan operasi data. Tombol tema boleh dipindahkan dari masthead, tetapi handler `#themeBtn`/`syncThemeUI()` jangan dihapus. Reset dan impor/ekspor wajib mempertahankan dialog/handler. |
+
+**Belum jelas untuk diputuskan pada Fase 3:** apakah tiap subtab Aktivitas (khususnya katalog FX dan Etalase) membutuhkan hero atau cukup heading + panel primary; penempatan form surat mingguan; dan pemisahan aksi Profil yang saat ini hidup dalam satu subtab. Tidak ada markup yang diubah pada fase audit ini.
+
+## Kontrak interaksi yang harus dipertahankan
+
+### Handler global yang dipanggil dari markup
+
+Nama berikut dipanggil oleh atribut inline di template legacy atau file input shell. Saat mengganti markup ke modul, fungsi harus tetap terpapar pada `window` atau event binding harus menggantikannya dengan cakupan fungsi yang sama.
+
+| Area | Handler |
+|---|---|
+| Navigasi, ritual, check-in, jadwal | `go`, `render`, `setSel`, `setStart`, `setCi`, `ci`, `toggle`, `toggleOvr`, `setLow`, `winLow`, `restDay`, `skipQ`, `bath`, `setWake`, `setWork`, `setC`, `addC`, `delC`, `wset`, `tag`, `claim`, `togglePeriodMode`, `completeRescue`, `pickSpa`, `ask`, `startRun` |
+| Diary, Muse, foto, dialog, arsip | `auto`, `autoArc`, `setMusePhoto`, `handleVanityPhoto`, `handleLookPhoto`, `handleRestoreFile`, `openMuseSheet`, `openJarSheet`, `addJarProof`, `addPhoto`, `editLookSlot`, `editVanityItem`, `addVanityModal`, `restoreFromText`, `exportArchiveJson`, `copyBackupText`, `downloadRecapPoster`, `openRecapCardModal`, `resetAll` |
+| Aktivitas, media, rekomendasi | `fxDone`, `fxFav`, `fxNope`, `fxPreset`, `fxRest`, `fxRoll`, `fxSet`, `fxSkip`, `fxStart`, `fxSur`, `nowOpen`, `nextFact`, `logMediaDone`, `openMediaPlay`, `delMedia`, `addCustomMedia`, `openRescueModal` |
+| Buku | `bkAdd`, `bkCheck`, `bkDel`, `bkDoneQuote`, `bkFinish`, `bkQuote`, `bkSave`, `bkSetPage`, `bkStart`, `bookSheet` |
+
+### ID yang dirujuk atau didefinisikan oleh markup
+
+- Shell: `main`, `nav`, `quiet-rail`, `mastIssue`, `themeBtn`, `themeIco`, `themeTxt`, `dlg`, `dT`, `dB`, `dNo`, `dYes`, `sheet`, `toast`, `museInput`, `vanityPhIn`, `lookPhIn`, `restoreIn`.
+- Elemen dinamis yang dipilih/dibaca JavaScript: `bkA`, `bkP`, `bkT`, `bkpIn`, `bkpTxt`, `jarIn`, `lkDesc`, `lkTitle`, `mCatSel`, `mDur`, `mTitle`, `mUrl`, `nvCat`, `nvName`, `nvNote`, `nvRole`, `ph`, `recapCanvas`, `sv`, `svArc`, `vName`, `vNote`.
+- ID input/label dan SVG yang juga didefinisikan template: `bkQ`, `cfBear`, `cfBun`, `cfEye`, `cfFawn`, `cfRib`, `cfWool`, `f1`, `f2`, `f3`, `j1`, `j2`, `j3`, `mottoIn`, `sd0`, `sn`, `w1`, `w2`, `w3`.
+
+Semua file input shell menghubungkan `museInput → setMusePhoto`, `vanityPhIn → handleVanityPhoto`, `lookPhIn → handleLookPhoto`, dan `restoreIn → handleRestoreFile`. `#sheet`, `#dlg`, `#toast`, status autosave `#sv`/`#svArc`, dan kontainer navigasi/rail adalah kontrak markup lainnya.
+
+## Fase berikutnya
+
+Belum ada kode UI yang diubah. Fase 1 baru dimulai setelah audit ini ditinjau: token dan shell baru, termasuk daftar nilai token gelap untuk persetujuan sebelum lanjut.
