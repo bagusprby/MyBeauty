@@ -5,7 +5,6 @@ import { selectLocalCacheForUser, bindLocalCacheToUser, archiveLocalState, prese
 import { showLogin, showImportChoice, hideAuthScreen, exportState, showBootFailure } from "./ui/auth-screen.js";
 import { ART } from "./art/library.js";
 import { configurePhotoStorage, deleteImageObject, imageUrl, uploadCanvas } from "./data/photo-storage.js";
-import legacyApp from "./legacy-app.js?raw";
 import "./styles/sync-status.css";
 import "./styles/app.css";
 
@@ -53,19 +52,29 @@ window.__glowProfileActions = () => {
 window.addEventListener("online", () => repo.retry());
 
 function loadLegacyApp() {
-  if (legacyLoaded) return;
-  const script = document.createElement("script");
-  script.textContent = legacyApp;
-  document.head.append(script);
-  if (!window.__glowApp) throw new Error("Legacy app did not initialize");
-  legacyLoaded = true;
+  if (legacyLoaded) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = `${import.meta.env.BASE_URL}legacy-app.js`;
+    script.async = false;
+    script.onload = () => {
+      if (!window.__glowApp) {
+        reject(new Error("Legacy app script loaded but did not create window.__glowApp"));
+        return;
+      }
+      legacyLoaded = true;
+      resolve();
+    };
+    script.onerror = () => reject(new Error("Legacy app script could not be loaded from " + script.src));
+    document.head.append(script);
+  });
 }
 
 async function activateUser(user) {
   const cache = selectLocalCacheForUser(user.id);
   repo.hadLocalCache = cache.isLegacy ? cache.legacyState : null;
   repo.hadOwnedCache = cache.hasOwnedCache;
-  loadLegacyApp();
+  await loadLegacyApp();
   bindLocalCacheToUser(user.id, window.__glowApp.getState());
   await repo.initialize(window.__glowApp.getState, window.__glowApp.getDefaultState);
   const firstCloudJourney = repo.user && !repo.journeyId && !repo.hadOwnedCache && !repo.pendingImportState && !repo.accountHasData;
@@ -105,7 +114,7 @@ async function activateUser(user) {
 
 try {
   if (!supabase) {
-    loadLegacyApp();
+    await loadLegacyApp();
     await repo.initialize(window.__glowApp.getState, window.__glowApp.getDefaultState);
   } else {
     const { data: { session }, error } = await supabase.auth.getSession();
