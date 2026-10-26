@@ -2,7 +2,7 @@ import { supabase, signupAllowed } from "./data/client.js";
 import { GlowRepository } from "./data/repo.js";
 import { setSyncStatus } from "./ui/sync-status.js";
 import { selectLocalCacheForUser, bindLocalCacheToUser, archiveLocalState, preserveLegacyImport, removeLegacyCache } from "./state/local-cache.js";
-import { showLogin, showImportChoice, hideAuthScreen, exportState } from "./ui/auth-screen.js";
+import { showLogin, showImportChoice, hideAuthScreen, exportState, showBootFailure } from "./ui/auth-screen.js";
 import { ART } from "./art/library.js";
 import { configurePhotoStorage, deleteImageObject, imageUrl, uploadCanvas } from "./data/photo-storage.js";
 import legacyApp from "./legacy-app.js?raw";
@@ -103,13 +103,19 @@ async function activateUser(user) {
   }
 }
 
-if (!supabase) {
-  loadLegacyApp();
-  await repo.initialize(window.__glowApp.getState, window.__glowApp.getDefaultState);
-} else {
-  const { data: { session }, error } = await supabase.auth.getSession();
-  if (session?.user && !error) await activateUser(session.user);
-  else showLogin({ supabase, signupAllowed, onSuccess: async user => {
-    if (user) await activateUser(user);
-  }});
+try {
+  if (!supabase) {
+    loadLegacyApp();
+    await repo.initialize(window.__glowApp.getState, window.__glowApp.getDefaultState);
+  } else {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) throw error;
+    if (session?.user) await activateUser(session.user);
+    else showLogin({ supabase, signupAllowed, onSuccess: async user => {
+      if (user) await activateUser(user);
+    }});
+  }
+} catch (error) {
+  console.error("My Glow Up Era startup failed", error);
+  showBootFailure(error);
 }

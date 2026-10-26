@@ -16,6 +16,12 @@ export function hideAuthScreen() {
   document.getElementById("auth-screen")?.remove();
 }
 
+export function showBootFailure(error) {
+  const el = root();
+  const detail = escapeHtml(error?.stack || error?.message || String(error));
+  el.innerHTML = `<section class="auth-card"><div class="auth-lace" aria-hidden="true">♡　♡　♡　♡　♡</div><div class="auth-crest">My Glow Up Era</div><h1>Diary belum dapat dibuka</h1><p class="auth-copy">Aplikasi berhenti saat menyiapkan ruang pribadimu. Rincian ini membantu menemukan penyebabnya.</p><details open><summary>Detail teknis</summary><pre class="auth-diagnostic">${detail}</pre></details><button class="auth-primary" type="button" onclick="location.reload()">Coba lagi</button></section>`;
+}
+
 export function showLogin({ supabase, signupAllowed, onSuccess }) {
   const el = root();
   el.innerHTML = `

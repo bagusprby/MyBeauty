@@ -34,4 +34,5 @@ body.auth-gated #toast, body.auth-gated input[type="file"] { display: none !impo
 .auth-primary:disabled, .auth-secondary:disabled { opacity: .65; }
 .auth-error { min-height: 1.2em; margin: 4px 0; color: #9e303d; font-size: .85rem; }
 .auth-privacy { display: block; margin-top: 16px; color: var(--mut, #8c6d66); }
+.auth-diagnostic { max-height: 220px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; text-align: left; font: 12px/1.45 ui-monospace, Consolas, monospace; color: var(--ink, #4a302c); background: var(--blush-soft, #fdf1f3); border: 1px solid var(--line, #ebd3ce); border-radius: 10px; padding: 10px; }
 @media (max-width: 420px) { .auth-card { padding: 24px 18px; } }
