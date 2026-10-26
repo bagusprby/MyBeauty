@@ -1,8 +1,39 @@
-/* Calm, consistent hierarchy layered over the original coquette palette. */
+/* Minimal coquette surfaces: warm neutrals carry content; rose stays an accent. */
+:root {
+  --bg-paper: #fffdfa;
+  --card: #fff;
+  --blush: #f4e7e9;
+  --blush-soft: #fbf6f6;
+  --line: #e9e2df;
+  --gold-line: #d8c6ae;
+  --sh: 0 8px 24px rgba(74, 48, 44, .06);
+  --sh-soft: 0 2px 8px rgba(74, 48, 44, .035);
+}
+:root[data-theme="dark"] {
+  --bg-paper: #242124;
+  --card: #2a272a;
+  --blush: #40353a;
+  --blush-soft: #302a2d;
+  --line: #423b3e;
+  --gold-line: #705f54;
+  --sh: 0 8px 24px rgba(0, 0, 0, .18);
+  --sh-soft: 0 2px 8px rgba(0, 0, 0, .12);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-paper: #242124;
+    --card: #2a272a;
+    --blush: #40353a;
+    --blush-soft: #302a2d;
+    --line: #423b3e;
+    --gold-line: #705f54;
+    --sh: 0 8px 24px rgba(0, 0, 0, .18);
+    --sh-soft: 0 2px 8px rgba(0, 0, 0, .12);
+  }
+}
 body {
   background-image:
-    radial-gradient(ellipse at 12% 0%, rgba(204, 136, 146, .07), transparent 34%),
-    radial-gradient(ellipse at 92% 100%, rgba(164, 126, 134, .05), transparent 38%);
+    radial-gradient(ellipse at 12% 0%, rgba(204, 136, 146, .045), transparent 34%);
 }
 
 .wrap { padding-top: 18px; padding-bottom: 40px; }
@@ -17,17 +48,17 @@ body {
 #main > .tier-hero {
   padding: 18px;
   border: 1px solid var(--line);
-  border-radius: 20px;
-  background-color: var(--blush-soft);
-  background-image: linear-gradient(145deg, var(--blush-soft), var(--card));
-  box-shadow: var(--sh-soft);
+  border-left: 3px solid var(--rose);
+  border-radius: 15px;
+  background: var(--card);
+  box-shadow: none;
 }
 #main > .tier-hero::before,
 #main > .tier-hero::after { display: none; }
 #main > .tier-primary {
   padding: 16px;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--card);
   box-shadow: none;
 }
@@ -65,10 +96,7 @@ body {
   background: var(--card);
   border: 1px solid var(--line);
 }
-#main > .tier-hero {
-  background: linear-gradient(145deg, var(--blush-soft), var(--card));
-  border: 1px solid var(--line);
-}
+#main > .tier-hero { background: var(--card); border-left: 3px solid var(--rose); }
 #main > .coq-frame::before,
 #main > .card.paper::before,
 #main > .whisper::before { display: none; }
@@ -76,6 +104,51 @@ body {
 #main > .whisper p { font-family: "Nunito", sans-serif; font-size: .98rem; font-style: normal; }
 #main > .cycle-banner,
 #main > .rescue-banner { border-radius: 14px; box-shadow: none; }
+
+#main .card,
+#main .coq-frame,
+#main .boutique-wall,
+#main .notebook-card,
+#main .mirror-card,
+#main .media-card-vis,
+#main .wardrobe-box,
+#main .spa-card,
+#main .whisper,
+#main .nx,
+#main .cycle-banner,
+#main .rescue-banner {
+  border-radius: 14px;
+  box-shadow: none;
+}
+#main .card,
+#main .coq-frame,
+#main .boutique-wall,
+#main .notebook-card,
+#main .mirror-card,
+#main .media-card-vis,
+#main .wardrobe-box,
+#main .spa-card {
+  background-color: var(--card);
+  border-color: var(--line);
+}
+#main .card.paper,
+#main .coq-frame,
+#main .boutique-wall,
+#main .notebook-card { background-image: none; }
+#main .card.paper::before,
+#main .coq-frame::before,
+#main .whisper::before,
+#main .boutique-wall::before,
+#main .boutique-wall::after { display: none; }
+#main .tier-hero .card,
+#main .tier-hero .mirror-card,
+#main .tier-hero .mini-frame,
+#main .tier-hero .center-portrait { box-shadow: none; }
+#main .tier-primary { border-color: var(--line); background-color: var(--card); }
+#main .tier-quiet { background: transparent; }
+#main .whisper { border-left: 2px solid var(--rose); background: var(--blush-soft); }
+#main .cycle-banner { border-left: 3px solid var(--rose); background: var(--blush-soft); color: var(--ink); }
+#main .rescue-banner { border-radius: 14px; box-shadow: none; }
 
 .boutique-hdr { border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 12px; }
 .boutique-hdr::before { font-size: .8rem; opacity: .65; }
