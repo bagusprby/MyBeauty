@@ -88,6 +88,35 @@ Nama berikut dipanggil oleh atribut inline di template legacy atau file input sh
 
 Semua file input shell menghubungkan `museInput → setMusePhoto`, `vanityPhIn → handleVanityPhoto`, `lookPhIn → handleLookPhoto`, dan `restoreIn → handleRestoreFile`. `#sheet`, `#dlg`, `#toast`, status autosave `#sv`/`#svArc`, dan kontainer navigasi/rail adalah kontrak markup lainnya.
 
+## Fase 1 — fondasi tipografi dan shell
+
+Fase 1 menerapkan fondasi visual dari artboard mobile/desktop tanpa mengubah logika data atau perhitungan aplikasi.
+
+- `index.html` kini hanya memiliki satu title, satu viewport meta dengan `viewport-fit=cover`, dan satu tautan font. Font yang dimuat hanya Cormorant Garamond 500/600 dan Inter 400/500/600; dekorasi masthead/heart-lace shell lama dihapus.
+- `src/styles/tokens.css` memusatkan token warna, radius, spasi, dan font. Nilai mode terang mengikuti spesifikasi desain. `src/styles/shell.css` mengatur navigasi teks pada mobile, sidebar pada desktop, rail Ringkasan, skala tipografi, fokus keyboard, safe area, dan reduced motion.
+- Navigasi mobile berlabel Hari ini, Perjalanan, Aktivitas, Diary, Profil. Pada desktop, label yang sama tampil vertikal di sidebar dengan “Glow Up Era”; rail kanan diberi judul Ringkasan. Untuk lebar 1024–1279 px sidebar dan rail menyempit agar konten tetap muat; pada ≥1280 px ukuran sidebar 232 px dan rail hingga 320 px.
+- Kontrol tema dipindah ke Profil → Pengaturan. `toggleTheme()` tetap mengubah `S.theme`, menyimpan melalui `save()`, dan memperbarui label; hanya lokasinya yang berubah.
+- Hierarki dan konten kartu lama tetap utuh pada fase fondasi ini. Pengurutan serta penyederhanaan permukaan kartu dilakukan pada fase desain tab berikutnya.
+
+### Token mode gelap yang diusulkan
+
+Warna gelap belum tercantum di PDF, jadi nilai berikut adalah usulan yang akan digunakan bila disetujui:
+
+| Token | Nilai |
+|---|---|
+| `--bg` | `#171416` |
+| `--surface` | `#211D20` |
+| `--ink` | `#FAF7F5` |
+| `--muted` | `#C8BFC1` |
+| `--line` / `--line-strong` | `#40383B` / `#5A4D51` |
+| `--accent` / `--accent-soft` | `#D98297` / `#E8B4C0` |
+| `--hero-bg` / `--hero-ink` / `--hero-muted` | `#2B2426` / `#FAF7F5` / `#D9CCC9` |
+| `--photo-ph` / `--photo-ph-ink` | `#443A3D` / `#F0E5E3` |
+
+Perubahan file fase ini: `index.html`, `public/legacy-app.js`, `src/bootstrap.js`, `src/styles/tokens.css`, `src/styles/shell.css`, `src/styles/app.css`, `src/styles/minimal.css`, `src/styles/auth-screen.css`, `src/styles/sync-status.css`, dan dokumen ini. Belum ada build atau pemeriksaan visual browser pada fase ini.
+
+Perubahan kontrak shell: `mastIssue` sudah dihapus bersama masthead lama. `themeBtn`, `themeIco`, dan `themeTxt` sekarang baru dibuat saat Profil → Pengaturan dirender; fungsi `syncThemeUI()` tetap memperbarui ketiganya.
+
 ## Fase berikutnya
 
-Belum ada kode UI yang diubah. Fase 1 baru dimulai setelah audit ini ditinjau: token dan shell baru, termasuk daftar nilai token gelap untuk persetujuan sebelum lanjut.
+Fase 2 menata urutan dan bobot kartu sesuai hierarki per tab setelah token mode gelap ini disetujui.

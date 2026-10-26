@@ -696,12 +696,12 @@ function drawRecapCanvas() {
 
   // Header Issue Title
   ctx.fillStyle = "#8c6d66";
-  ctx.font = "700 17px Nunito, sans-serif";
+  ctx.font = "700 17px Inter, sans-serif";
   ctx.textAlign = "center";
   ctx.fillText(`MY GLOW UP ERA  ·  ISSUE NO. ${String(todayN()).padStart(2, "0")}`, W / 2, 78);
 
   ctx.fillStyle = "#84362c";
-  ctx.font = "italic 54px 'Cormorant Garamond', Georgia, serif";
+  ctx.font = "italic 54px 'Cormorant Garamond', serif";
   ctx.fillText("Personal Beauty Chronicle", W / 2, 134);
 
   // Motto Oval Box
@@ -714,7 +714,7 @@ function drawRecapCanvas() {
   ctx.stroke();
 
   ctx.fillStyle = "#4a302c";
-  ctx.font = "italic 24px 'Cormorant Garamond', Georgia, serif";
+  ctx.font = "italic 24px 'Cormorant Garamond', serif";
   const motto = (S.muse && S.muse.motto) ? S.muse.motto : "Elegance in gentle pace.";
   ctx.fillText(`“${motto.slice(0, 48)}”`, W / 2, 214);
 
@@ -728,7 +728,7 @@ function drawRecapCanvas() {
   ctx.stroke();
 
   ctx.fillStyle = "#9e525d";
-  ctx.font = "700 18px 'Cormorant Garamond', Georgia, serif";
+  ctx.font = "700 18px 'Cormorant Garamond', serif";
   ctx.fillText("❦  CHARACTER AURA STATS  ❦", W / 2, 316);
 
   const auras = calcAura();
@@ -736,7 +736,7 @@ function drawRecapCanvas() {
     const y = 364 + idx * 48;
     ctx.textAlign = "left";
     ctx.fillStyle = "#4a302c";
-    ctx.font = "700 19px Nunito, sans-serif";
+    ctx.font = "700 19px Inter, sans-serif";
     ctx.fillText(`${a.icon}  ${a.name.toUpperCase()}`, 96, y);
 
     let hearts = "";
@@ -747,7 +747,7 @@ function drawRecapCanvas() {
 
     ctx.textAlign = "right";
     ctx.fillStyle = "#764c43";
-    ctx.font = "700 22px 'Cormorant Garamond', Georgia, serif";
+    ctx.font = "700 22px 'Cormorant Garamond', serif";
     ctx.fillText(`${a.val}/10`, W - 96, y);
   });
 
@@ -762,7 +762,7 @@ function drawRecapCanvas() {
 
   ctx.textAlign = "center";
   ctx.fillStyle = "#9e525d";
-  ctx.font = "700 18px 'Cormorant Garamond', Georgia, serif";
+  ctx.font = "700 18px 'Cormorant Garamond', serif";
   ctx.fillText("❦  MY SIGNATURE DOSSIER  ❦", W / 2, 670);
 
   const rows = [
@@ -774,10 +774,10 @@ function drawRecapCanvas() {
     const y = 712 + idx * 40;
     ctx.textAlign = "left";
     ctx.fillStyle = "#8c6d66";
-    ctx.font = "700 15px Nunito, sans-serif";
+    ctx.font = "700 15px Inter, sans-serif";
     ctx.fillText(r[0], 96, y);
     ctx.fillStyle = "#4a302c";
-    ctx.font = "600 17px Nunito, sans-serif";
+    ctx.font = "600 17px Inter, sans-serif";
     ctx.fillText(String(r[1] || "").slice(0, 38), 235, y);
   });
 
@@ -791,14 +791,14 @@ function drawRecapCanvas() {
 
   ctx.textAlign = "center";
   ctx.fillStyle = "#84362c";
-  ctx.font = "700 14px Nunito, sans-serif";
+  ctx.font = "700 14px Inter, sans-serif";
   ctx.fillText("LITTLE PROOF JAR HIGHLIGHT", W / 2, 898);
   ctx.fillStyle = "#4a302c";
-  ctx.font = "italic 21px 'Cormorant Garamond', Georgia, serif";
+  ctx.font = "italic 21px 'Cormorant Garamond', serif";
   ctx.fillText(`“${latestJar.slice(0, 52)}”`, W / 2, 934);
 
   ctx.fillStyle = "#8c6d66";
-  ctx.font = "600 15px Nunito, sans-serif";
+  ctx.font = "600 15px Inter, sans-serif";
   ctx.fillText(`${daysIn()} Days Present  ·  Soft Streak ${streak()} 🌷  ·  ${ (S.jar || []).length } Proofs Collected`, W / 2, 994);
 }
 
@@ -2439,7 +2439,9 @@ function vMe() {
     h += `<div class="card">
       <div class="boutique-hdr"><span class="boutique-hdr-title">Editorial Preferences</span></div>
       <div class="row" style="margin:8px 0">
-        <button class="btn ghost" onclick="$('#themeBtn').click()">Ganti Mode Terang / Malam</button>
+        <button class="btn ghost theme-toggle" id="themeBtn" type="button" onclick="toggleTheme()" aria-label="Ganti mode terang atau gelap">
+          <span id="themeIco" aria-hidden="true">☾</span> <span id="themeTxt">Malam</span>
+        </button>
         <button class="btn ghost" onclick="openMuseSheet()">Atur Foto Gallery Wall</button>
         <button class="btn" onclick="openRecapCardModal()">📸 Cetak Poster Edisi</button>
       </div>
@@ -2462,7 +2464,7 @@ function vMe() {
   return h;
 }
 
-const TABS2 = [["today", "home", "Beranda"], ["journey", "map", "Perjalanan"], ["act", "spark", "Aktivitas"], ["diary", "book", "Diary & Lemari"], ["me", "user", "Profil"]];
+const TABS2 = [["today", "Hari ini"], ["journey", "Perjalanan"], ["act", "Aktivitas"], ["diary", "Diary"], ["me", "Profil"]];
 
 function syncThemeUI() {
   const dk = matchMedia("(prefers-color-scheme:dark)").matches;
@@ -2472,12 +2474,12 @@ function syncThemeUI() {
   if (ti && tt) { ti.textContent = cur == "dark" ? "☀" : "☾"; tt.textContent = cur == "dark" ? "Terang" : "Malam"; }
 }
 
-$("#themeBtn").onclick = () => {
+function toggleTheme() {
   const dk = matchMedia("(prefers-color-scheme:dark)").matches;
   const cur = S.theme || (dk ? "dark" : "light");
   S.theme = cur == "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = S.theme; save(); syncThemeUI();
-};
+}
 
 function go(t) { tab = t; if (t == "today" || t == "diary" || (t == "journey" && sel < 1)) sel = todayN(); render(); scrollTo(0, 0); }
 
@@ -2513,12 +2515,11 @@ function render() {
   const y = scrollY;
   try {
   checkAch(); syncThemeUI();
-  const mi = $("#mastIssue");
-  if (mi) mi.textContent = `ISSUE NO. ${String(todayN()).padStart(2, "0")} · ${new Date().toLocaleDateString("id-ID", { month: "short", year: "numeric" }).toUpperCase()}`;
-  $("#nav").innerHTML = TABS2.map(t => `<button class="${tab == t[0] ? "on" : ""}" onclick="go('${t[0]}')" aria-label="${t[2]}">${ico(t[1], 19)}${t[2]}</button>`).join("");
+  $("#nav").innerHTML = `<div class="sidebar-brand">Glow Up Era</div>${TABS2.map(([key, label]) => `<button class="${tab == key ? "on" : ""}" onclick="go('${key}')" aria-label="${label}" aria-current="${tab == key ? "page" : "false"}">${label}</button>`).join("")}`;
   $("#main").innerHTML = { today: vToday, journey: vJourney, act: vAct, diary: vJournal, me: vMe }[tab]();
+  syncThemeUI();
   applyCardHierarchy(tab);
-  const rail = $("#quiet-rail"); if (rail) rail.innerHTML = window.__glowApp?.getQuietHTML?.() || "";
+  const rail = $("#quiet-rail"); if (rail) rail.innerHTML = `<h2 class="eyebrow rail-title">Ringkasan</h2>${window.__glowApp?.getQuietHTML?.() || ""}`;
   if (tab === "me") window.__glowProfileActions?.();
   cfSweep($("#main"));
   scrollTo(0, y);
@@ -2527,7 +2528,7 @@ function render() {
     const main = $("#main");
     if (main) main.innerHTML = `<section class="card app-error-card"><span class="eyebrow">Diary belum dapat dimuat</span><h2>Ada bagian data yang gagal dibuka</h2><p class="mut">Perubahan tersimpan di cache perangkat. Muat ulang aplikasi untuk mencoba lagi.</p><details><summary>Detail teknis</summary><pre>${E(error?.message || error)}</pre></details><button class="btn big" type="button" onclick="location.reload()">Muat ulang</button></section>`;
     const nav = $("#nav");
-    if (nav && !nav.children.length) nav.innerHTML = TABS2.map(t => `<button class="${tab == t[0] ? "on" : ""}" onclick="go('${t[0]}')" aria-label="${t[2]}">${ico(t[1], 19)}${t[2]}</button>`).join("");
+    if (nav && !nav.children.length) nav.innerHTML = `<div class="sidebar-brand">Glow Up Era</div>${TABS2.map(([key, label]) => `<button class="${tab == key ? "on" : ""}" onclick="go('${key}')" aria-label="${label}" aria-current="${tab == key ? "page" : "false"}">${label}</button>`).join("")}`;
   }
 }
 

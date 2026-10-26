@@ -1,36 +1,4 @@
-/* Minimal coquette surfaces: warm neutrals carry content; rose stays an accent. */
-:root {
-  --bg-paper: #fffdfa;
-  --card: #fff;
-  --blush: #f4e7e9;
-  --blush-soft: #fbf6f6;
-  --line: #e9e2df;
-  --gold-line: #d8c6ae;
-  --sh: 0 8px 24px rgba(74, 48, 44, .06);
-  --sh-soft: 0 2px 8px rgba(74, 48, 44, .035);
-}
-:root[data-theme="dark"] {
-  --bg-paper: #242124;
-  --card: #2a272a;
-  --blush: #40353a;
-  --blush-soft: #302a2d;
-  --line: #423b3e;
-  --gold-line: #705f54;
-  --sh: 0 8px 24px rgba(0, 0, 0, .18);
-  --sh-soft: 0 2px 8px rgba(0, 0, 0, .12);
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg-paper: #242124;
-    --card: #2a272a;
-    --blush: #40353a;
-    --blush-soft: #302a2d;
-    --line: #423b3e;
-    --gold-line: #705f54;
-    --sh: 0 8px 24px rgba(0, 0, 0, .18);
-    --sh-soft: 0 2px 8px rgba(0, 0, 0, .12);
-  }
-}
+/* Minimal component overrides; shared tokens live in tokens.css. */
 body {
   background-image:
     radial-gradient(ellipse at 12% 0%, rgba(204, 136, 146, .045), transparent 34%);
@@ -101,7 +69,7 @@ body {
 #main > .card.paper::before,
 #main > .whisper::before { display: none; }
 #main > .whisper { background: var(--blush-soft); border: 1px solid var(--line); }
-#main > .whisper p { font-family: "Nunito", sans-serif; font-size: .98rem; font-style: normal; }
+#main > .whisper p { font-family: "Inter", sans-serif; font-size: .98rem; font-style: normal; }
 #main > .cycle-banner,
 #main > .rescue-banner { border-radius: 14px; box-shadow: none; }
 

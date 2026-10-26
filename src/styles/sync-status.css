@@ -10,7 +10,7 @@
   background: var(--card, #fffdfb);
   color: var(--mut, #8c6d66);
   box-shadow: var(--sh-soft, 0 4px 14px rgba(118,76,67,.05));
-  font: 600 12px/1.2 "Nunito", sans-serif;
+  font: 600 12px/1.2 "Inter", sans-serif;
   cursor: pointer;
 }
 .sync-indicator[data-state="failed"] { color: #9e303d; border-color: currentColor; }

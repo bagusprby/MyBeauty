@@ -1,0 +1,120 @@
+:root {
+  color-scheme: light;
+  --bg: #FAF7F5;
+  --surface: #FFFFFF;
+  --ink: #2B2426;
+  --muted: #6B6165;
+  --line: #EEE7E4;
+  --line-strong: #E6DDD9;
+  --accent: #9E4A63;
+  --accent-soft: #E8B4C0;
+  --hero-bg: #2B2426;
+  --hero-ink: #FAF7F5;
+  --hero-muted: #D9CCC9;
+  --photo-ph: #E6D9D6;
+  --photo-ph-ink: #574D50;
+
+  --r-hero-m: 24px;
+  --r-hero-d: 28px;
+  --r-card: 20px;
+  --r-pill: 999px;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: Inter, sans-serif;
+
+  /* Compatibility aliases used by the legacy component stylesheet. */
+  --card: var(--surface);
+  --bg-paper: var(--surface);
+  --mut: var(--muted);
+  --brown: var(--muted);
+  --rose: var(--accent-soft);
+  --rose-deep: var(--accent);
+  --crimson-script: var(--accent);
+  --mauve: var(--accent);
+  --blush: var(--accent-soft);
+  --blush-soft: #F7F0F1;
+  --cream: var(--bg);
+  --gold-line: var(--line-strong);
+  --sh: 0 10px 28px rgba(43, 36, 38, .09);
+  --sh-soft: 0 2px 10px rgba(43, 36, 38, .05);
+  --radius-hero: var(--r-hero-m);
+  --radius-card: var(--r-card);
+  --radius-control: var(--r-pill);
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #171416;
+  --surface: #211D20;
+  --ink: #FAF7F5;
+  --muted: #C8BFC1;
+  --line: #40383B;
+  --line-strong: #5A4D51;
+  --accent: #D98297;
+  --accent-soft: #E8B4C0;
+  --hero-bg: #2B2426;
+  --hero-ink: #FAF7F5;
+  --hero-muted: #D9CCC9;
+  --photo-ph: #443A3D;
+  --photo-ph-ink: #F0E5E3;
+  --blush-soft: #302A2D;
+  --sh: 0 10px 28px rgba(0, 0, 0, .24);
+  --sh-soft: 0 2px 10px rgba(0, 0, 0, .16);
+  --card: var(--surface);
+  --bg-paper: var(--surface);
+  --mut: var(--muted);
+  --brown: var(--muted);
+  --rose: var(--accent-soft);
+  --rose-deep: var(--accent);
+  --crimson-script: var(--accent);
+  --mauve: var(--accent);
+  --blush: var(--accent-soft);
+  --cream: var(--bg);
+  --gold-line: var(--line-strong);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #171416;
+    --surface: #211D20;
+    --ink: #FAF7F5;
+    --muted: #C8BFC1;
+    --line: #40383B;
+    --line-strong: #5A4D51;
+    --accent: #D98297;
+    --accent-soft: #E8B4C0;
+    --hero-bg: #2B2426;
+    --hero-ink: #FAF7F5;
+    --hero-muted: #D9CCC9;
+    --photo-ph: #443A3D;
+    --photo-ph-ink: #F0E5E3;
+    --blush-soft: #302A2D;
+    --sh: 0 10px 28px rgba(0, 0, 0, .24);
+    --sh-soft: 0 2px 10px rgba(0, 0, 0, .16);
+    --card: var(--surface);
+    --bg-paper: var(--surface);
+    --mut: var(--muted);
+    --brown: var(--muted);
+    --rose: var(--accent-soft);
+    --rose-deep: var(--accent);
+    --crimson-script: var(--accent);
+    --mauve: var(--accent);
+    --blush: var(--accent-soft);
+    --cream: var(--bg);
+    --gold-line: var(--line-strong);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }

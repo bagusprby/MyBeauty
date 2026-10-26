@@ -1,69 +1,4 @@
-
-:root {
-  --bg: #faeeeb;
-  --bg-paper: #fffaf7;
-  --card: #fffdfb;
-  --ink: #4a302c;
-  --mut: #8c6d66;
-  --rose: #cc8892;
-  --rose-deep: #9e525d;
-  --crimson-script: #84362c;
-  --mauve: #a47e86;
-  --blush: #f6dfe2;
-  --blush-soft: #fdf1f3;
-  --cream: #fcf3eb;
-  --line: #ebd3ce;
-  --gold-line: #d5b895;
-  --brown: #764c43;
-  --sh: 0 10px 30px rgba(118, 76, 67, 0.09);
-  --sh-soft: 0 4px 14px rgba(118, 76, 67, 0.05);
-  box-sizing: border-box;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #1e1517;
-    --bg-paper: #271c1f;
-    --card: #2d2124;
-    --ink: #f5e6e3;
-    --mut: #c2a59f;
-    --rose: #de99a3;
-    --rose-deep: #f0b6bf;
-    --crimson-script: #f2b1a8;
-    --mauve: #b8949c;
-    --blush: #442e33;
-    --blush-soft: #362428;
-    --cream: #342729;
-    --line: #4d383c;
-    --gold-line: #8c7355;
-    --brown: #e3b8ab;
-    --sh: 0 10px 30px rgba(0, 0, 0, 0.38);
-    --sh-soft: 0 4px 14px rgba(0, 0, 0, 0.25);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #1e1517;
-  --bg-paper: #271c1f;
-  --card: #2d2124;
-  --ink: #f5e6e3;
-  --mut: #c2a59f;
-  --rose: #de99a3;
-  --rose-deep: #f0b6bf;
-  --crimson-script: #f2b1a8;
-  --mauve: #b8949c;
-  --blush: #442e33;
-  --blush-soft: #362428;
-  --cream: #342729;
-  --line: #4d383c;
-  --gold-line: #8c7355;
-  --brown: #e3b8ab;
-  --sh: 0 10px 30px rgba(0, 0, 0, 0.38);
-  --sh-soft: 0 4px 14px rgba(0, 0, 0, 0.25);
-  color-scheme: dark;
-}
+/* Theme tokens are centralized in tokens.css. */
 html { scroll-padding-top: env(safe-area-inset-top, 0px); overflow-x: hidden; }
 * { box-sizing: border-box; }
 body {
@@ -73,7 +8,7 @@ body {
     radial-gradient(circle at 20% 15%, rgba(204, 136, 146, 0.12) 0%, transparent 45%),
     radial-gradient(circle at 80% 85%, rgba(164, 126, 134, 0.1) 0%, transparent 50%);
   color: var(--ink);
-  font: 15px/1.58 "Nunito", -apple-system, BlinkMacSystemFont, sans-serif;
+  font: 15px/1.58 "Inter", sans-serif;
   padding-bottom: 100px;
   overflow-x: hidden;
 }
@@ -81,8 +16,8 @@ body {
 main { min-width: 0; }
 
 /* Typography */
-h1, h2, h3, .serif { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
-.script { font-family: "Great Vibes", cursive; font-weight: 400; line-height: 1.15; color: var(--crimson-script); }
+h1, h2, h3, .serif { font-family: "Cormorant Garamond", serif; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+.script { font-family: "Cormorant Garamond", serif; font-weight: 500; line-height: 1.15; color: var(--crimson-script); }
 .eyebrow { display: block; font-size: 0.69rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mut); }
 h1 { font-size: 2.15rem; line-height: 1.08; font-style: italic; }
 h2 { font-size: 1.6rem; line-height: 1.15; margin-bottom: 4px; }
@@ -123,12 +58,12 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
   border: 1px dashed var(--rose);
   display: grid;
   place-content: center;
-  font-family: "Great Vibes", cursive;
+  font-family: "Cormorant Garamond", serif;
   font-size: 1.25rem;
   color: var(--crimson-script);
 }
 .mast-title {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 1.18rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -206,7 +141,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
   border: 1.5px solid var(--gold-line);
   border-radius: 99px;
   padding: 3px 16px;
-  font-family: "Great Vibes", cursive;
+  font-family: "Cormorant Garamond", serif;
   font-size: 1.45rem;
   color: var(--crimson-script);
   box-shadow: var(--sh-soft);
@@ -315,7 +250,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
   cursor: pointer;
   transition: transform 0.18s, border-color 0.18s;
   color: var(--ink);
-  font: 600 0.73rem "Nunito", sans-serif;
+  font: 600 0.73rem "Inter", sans-serif;
 }
 .obj-btn:hover, .obj-btn:active { transform: translateY(-2px); border-color: var(--rose); background: var(--blush-soft); }
 .obj-btn svg { width: 38px; height: 38px; display: block; margin: 0 auto 4px; }
@@ -358,7 +293,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
   font-size: 0.95rem;
 }
 .boutique-hdr-title {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -415,7 +350,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
   font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase;
 }
 .fx-info b {
-  display: block; font-family: "Cormorant Garamond", Georgia, serif;
+  display: block; font-family: "Cormorant Garamond", serif;
   font-size: 1.28rem; margin: 2px 0; color: var(--ink); line-height: 1.2;
 }
 .fx-info span { color: var(--mut); font-size: 0.78rem; }
@@ -453,7 +388,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
   background: linear-gradient(180deg, var(--blush-soft) 0%, var(--card) 100%);
 }
 .mirror-crown {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -536,7 +471,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
 .aura-name { font-weight: 700; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); display: flex; align-items: center; gap: 4px; }
 .aura-hearts { letter-spacing: 0.16em; font-size: 0.88rem; color: var(--rose); white-space: nowrap; overflow: hidden; }
 .aura-hearts .empty-h { color: var(--line); }
-.aura-score { text-align: right; font-family: "Cormorant Garamond", Georgia, serif; font-weight: 700; font-size: 0.94rem; color: var(--brown); }
+.aura-score { text-align: right; font-family: "Cormorant Garamond", serif; font-weight: 700; font-size: 0.94rem; color: var(--brown); }
 
 /* Home Salon & Spa Menu */
 .spa-card {
@@ -601,7 +536,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
 .chip, .btn {
   border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 99px; padding: 6px 12px;
-  font: 600 0.81rem "Nunito", sans-serif; cursor: pointer; transition: all 0.18s; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+  font: 600 0.81rem "Inter", sans-serif; cursor: pointer; transition: all 0.18s; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
 }
 .chip.on { background: var(--rose); border-color: var(--rose); color: #fff; }
 .btn { background: var(--rose); border-color: var(--rose); color: #fff; }
@@ -614,7 +549,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
 
 .sumr {
   width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px; text-align: left;
-  border: 1px dashed var(--rose); background: var(--blush-soft); color: var(--ink); border-radius: 14px; padding: 9px 12px; margin: 8px 0; font: 600 0.82rem "Nunito", sans-serif; cursor: pointer;
+  border: 1px dashed var(--rose); background: var(--blush-soft); color: var(--ink); border-radius: 14px; padding: 9px 12px; margin: 8px 0; font: 600 0.82rem "Inter", sans-serif; cursor: pointer;
 }
 .sumr u { color: var(--brown); flex: none; font-size: 0.76rem; }
 .q2 { margin: 6px 0; }
@@ -638,7 +573,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
 .qt b { display: block; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
 .qt small { display: block; color: var(--mut); font-size: 0.77rem; margin-top: 1px; }
 .qn { display: flex; align-items: center; gap: 4px; font-size: 0.67rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--rose-deep); }
-.lk { background: none; border: 0; color: var(--brown); font: 600 0.78rem "Nunito", sans-serif; text-decoration: underline; cursor: pointer; padding: 5px; }
+.lk { background: none; border: 0; color: var(--brown); font: 600 0.78rem "Inter", sans-serif; text-decoration: underline; cursor: pointer; padding: 5px; }
 .lnks { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin-top: 4px; }
 
 /* Journey Map */
@@ -647,7 +582,7 @@ h3 { font-size: 1.28rem; line-height: 1.2; margin: 0 0 4px; }
 .ms { position: relative; }
 .nd { position: absolute; left: -32px; top: 14px; width: 24px; height: 24px; border-radius: 50%; background: var(--rose); color: #fff; display: grid; place-content: center; }
 .dgrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 8px; }
-.dd { aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: 600 0.75rem "Nunito", sans-serif; cursor: pointer; padding: 0; display: grid; place-content: center; min-width: 0; }
+.dd { aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: 600 0.75rem "Inter", sans-serif; cursor: pointer; padding: 0; display: grid; place-content: center; min-width: 0; }
 .dd.full { background: var(--rose); border-color: var(--rose); color: #fff; }
 .dd.part { background: var(--blush); border-color: var(--rose); color: var(--ink); }
 .dd.r { border-style: dashed; border-color: var(--rose); color: var(--rose-deep); background: var(--blush-soft); }
@@ -669,7 +604,7 @@ label.q { display: block; font-weight: 700; font-size: 0.82rem; margin: 10px 0 3
 .seg .chip { flex: 1; justify-content: center; padding: 6px 4px; border: 0; background: transparent; font-size: 0.76rem; }
 .seg .chip.on { background: var(--card); color: var(--brown); box-shadow: var(--sh-soft); }
 .sg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.opt { background: var(--bg-paper); border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: left; font: 600 0.83rem "Nunito", sans-serif; color: var(--ink); cursor: pointer; min-width: 0; display: flex; align-items: center; gap: 8px; }
+.opt { background: var(--bg-paper); border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: left; font: 600 0.83rem "Inter", sans-serif; color: var(--ink); cursor: pointer; min-width: 0; display: flex; align-items: center; gap: 8px; }
 .opt.on { border-color: var(--rose); background: var(--blush); }
 .opt small { font-weight: 400; color: var(--mut); display: block; margin-top: 2px; }
 
@@ -680,7 +615,7 @@ label.q { display: block; font-weight: 700; font-size: 0.82rem; margin: 10px 0 3
   padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
   z-index: 10; box-shadow: 0 -4px 20px rgba(122, 82, 72, 0.06);
 }
-.nav button { flex: 1; max-width: 115px; background: none; border: 0; border-radius: 12px; padding: 5px 2px; color: var(--mut); font: 600 0.72rem "Nunito", sans-serif; cursor: pointer; }
+.nav button { flex: 1; max-width: 115px; background: none; border: 0; border-radius: 12px; padding: 5px 2px; color: var(--mut); font: 600 0.72rem "Inter", sans-serif; cursor: pointer; }
 .nav button svg { display: block; margin: 0 auto 2px; }
 .nav button.on { color: var(--brown); background: var(--blush-soft); }
 
@@ -702,7 +637,7 @@ dialog::backdrop { background: rgba(45, 25, 28, 0.45); backdrop-filter: blur(2px
 .tl:last-child { border-bottom: 0; }
 .tl b { width: 46px; flex: none; color: var(--rose-deep); font-variant-numeric: tabular-nums; }
 .wkgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 6px; }
-.wkd { text-align: left; border: 1px solid var(--line); background: var(--bg-paper); color: var(--ink); border-radius: 14px; padding: 9px; font: 0.78rem/1.35 "Nunito", sans-serif; cursor: pointer; display: flex; flex-direction: column; gap: 3px; }
+.wkd { text-align: left; border: 1px solid var(--line); background: var(--bg-paper); color: var(--ink); border-radius: 14px; padding: 9px; font: 0.78rem/1.35 "Inter", sans-serif; cursor: pointer; display: flex; flex-direction: column; gap: 3px; }
 .wkd.today { box-shadow: 0 0 0 2px var(--rose); }
 .wkd.sel { background: var(--blush-soft); border-color: var(--rose); }
 .crow { display: flex; gap: 6px; flex-wrap: wrap; margin: 5px 0; }
@@ -716,15 +651,15 @@ input[type=time], input[type=number], input[type=text], input[type=url], input[t
 /* ===== NEW: Whisper, Reading Nook & iOS polish ===== */
 .whisper { position: relative; background: linear-gradient(135deg, var(--blush-soft), var(--card)); border: 1.5px solid var(--gold-line); border-radius: 18px; padding: 13px 16px 11px; margin: 10px 0; box-shadow: var(--sh-soft); }
 .whisper::before { content: ""; position: absolute; inset: 5px; border: 1px dashed var(--rose); border-radius: 13px; opacity: 0.45; pointer-events: none; }
-.whisper p { font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.2rem; line-height: 1.38; font-style: italic; margin: 6px 0 8px; color: var(--ink); }
+.whisper p { font-family: "Cormorant Garamond", serif; font-size: 1.2rem; line-height: 1.38; font-style: italic; margin: 6px 0 8px; color: var(--ink); }
 .bk-top { display: grid; grid-template-columns: 54px 1fr; gap: 10px; align-items: center; margin-bottom: 6px; }
 .bk-top svg { width: 54px; height: 54px; }
 .rrow { display: flex; align-items: center; gap: 6px; margin: 6px 0 2px; }
 .rbar { flex: 1; height: 14px; border-radius: 99px; background: var(--blush); border: 1px solid var(--gold-line); overflow: hidden; }
 .rbar > i { display: block; height: 100%; border-radius: 99px; background: repeating-linear-gradient(45deg, var(--rose) 0 8px, #e8b3bb 8px 16px); transition: width 0.4s; }
-.rrow b { font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.05rem; color: var(--brown); min-width: 38px; text-align: right; }
+.rrow b { font-family: "Cormorant Garamond", serif; font-size: 1.05rem; color: var(--brown); min-width: 38px; text-align: right; }
 .bk-item { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px dashed var(--line); }
-.bk-item b { font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.08rem; }
+.bk-item b { font-family: "Cormorant Garamond", serif; font-size: 1.08rem; }
 .bk-pg { width: 88px; }
 .nook-mini { padding-bottom: 10px; }
 html { -webkit-text-size-adjust: 100%; }
@@ -752,7 +687,6 @@ html { -webkit-text-size-adjust: 100%; }
 @media (prefers-reduced-motion: reduce) { .cute-fb * { animation: none !important; } }
 
 
-:root { --radius-hero:22px; --radius-card:16px; --radius-control:12px; }
 button, input, select, textarea, a { touch-action: manipulation; }
 button, .chip, .btn, .opt, .dd { min-height:44px; }
 #quiet-rail { display:none; }
