@@ -1,0 +1,116 @@
+/* Calm, consistent hierarchy layered over the original coquette palette. */
+body {
+  background-image:
+    radial-gradient(ellipse at 12% 0%, rgba(204, 136, 146, .07), transparent 34%),
+    radial-gradient(ellipse at 92% 100%, rgba(164, 126, 134, .05), transparent 38%);
+}
+
+.wrap { padding-top: 18px; padding-bottom: 40px; }
+.heart-lace { height: 12px; background-size: 22px 14px; opacity: .48; margin-bottom: 10px; }
+.masthead { padding: 4px 0 12px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+.masthead::after { display: none; }
+.mast-title { letter-spacing: .1em; }
+.mast-sub { letter-spacing: .09em; }
+
+#main { display: flex; flex-direction: column; gap: 12px; }
+#main > * { min-width: 0; margin: 0; }
+#main > .tier-hero {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background-color: var(--blush-soft);
+  background-image: linear-gradient(145deg, var(--blush-soft), var(--card));
+  box-shadow: var(--sh-soft);
+}
+#main > .tier-hero::before,
+#main > .tier-hero::after { display: none; }
+#main > .tier-primary {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: none;
+}
+#main > .tier-quiet {
+  padding: 14px 4px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+#main > .tier-quiet .boutique-hdr { padding-bottom: 6px; }
+#main > .tier-quiet .washi { display: none; }
+
+/* Keep signature details in small accents; remove repeated frames and textures. */
+#main > .coq-frame,
+#main > .boutique-wall,
+#main > .notebook-card,
+#main > .card.paper,
+#main > .card.soft,
+#main > .mirror-card,
+#main > .wardrobe-box,
+#main > .spa-card,
+#main > .media-card-vis,
+#main > .whisper,
+#main > .nx {
+  border-radius: 16px;
+  box-shadow: none;
+}
+#main > .coq-frame,
+#main > .boutique-wall,
+#main > .card.paper,
+#main > .card.soft,
+#main > .wardrobe-box,
+#main > .spa-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+#main > .tier-hero {
+  background: linear-gradient(145deg, var(--blush-soft), var(--card));
+  border: 1px solid var(--line);
+}
+#main > .coq-frame::before,
+#main > .card.paper::before,
+#main > .whisper::before { display: none; }
+#main > .whisper { background: var(--blush-soft); border: 1px solid var(--line); }
+#main > .whisper p { font-family: "Nunito", sans-serif; font-size: .98rem; font-style: normal; }
+#main > .cycle-banner,
+#main > .rescue-banner { border-radius: 14px; box-shadow: none; }
+
+.boutique-hdr { border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 12px; }
+.boutique-hdr::before { font-size: .8rem; opacity: .65; }
+.obj-shortcuts { gap: 8px; }
+.obj-btn { border-radius: 14px; box-shadow: none; }
+.obj-btn:hover, .obj-btn:active { transform: none; }
+.chip, .btn, .opt, .dd, .nav button, .theme-toggle { transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
+.btn:hover, .chip:hover, .opt:hover { filter: brightness(.98); }
+.sync-indicator { box-shadow: none; }
+
+.nav { box-shadow: none; }
+.nav button { border-radius: 12px; }
+.nav button.on { background: var(--blush-soft); color: var(--rose-deep); }
+#quiet-rail { padding-top: 18px; }
+.quiet-card { padding: 12px 0; margin: 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; }
+.quiet-card:first-child { border-top: 1px solid var(--line); }
+
+@media (min-width: 1024px) {
+  body { grid-template-columns: 196px minmax(0, 700px) 260px; gap: 20px; padding: 24px; }
+  .wrap { max-width: 700px; padding-top: 0; }
+  .nav { width: 196px; height: auto; min-height: calc(100vh - 48px); padding: 14px 10px; border-radius: 18px; }
+  .nav button { min-height: 48px; font-size: .82rem; }
+  #quiet-rail { width: 260px; max-height: calc(100vh - 48px); }
+}
+
+@media (max-width: 700px) {
+  .wrap { padding-top: 12px; padding-bottom: 24px; }
+  .masthead { margin-bottom: 14px; }
+  #main { gap: 10px; }
+  #main > .tier-hero { padding: 15px 14px; }
+  #main > .tier-primary { padding: 14px; }
+  #main > .tier-quiet { padding: 12px 2px; }
+  .nav { box-shadow: 0 -2px 12px rgba(70, 40, 43, .045); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip, .btn, .opt, .dd, .nav button, .theme-toggle { transition: none; }
+}

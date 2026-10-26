@@ -7,6 +7,7 @@ import { ART } from "./art/library.js";
 import { configurePhotoStorage, deleteImageObject, imageUrl, uploadCanvas } from "./data/photo-storage.js";
 import "./styles/sync-status.css";
 import "./styles/app.css";
+import "./styles/minimal.css";
 
 window.__GLOW_ART = ART;
 let repo;
