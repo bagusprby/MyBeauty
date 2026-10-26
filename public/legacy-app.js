@@ -2115,16 +2115,18 @@ async function handleLookPhoto(el) {
   const r = new FileReader();
   r.onload = () => {
     const i = new Image();
-    i.onload = () => {
+    i.onload = async () => {
       const c = document.createElement("canvas"), k = Math.min(1, 420 / Math.max(i.width, i.height));
       c.width = i.width * k; c.height = i.height * k;
       c.getContext("2d").drawImage(i, 0, 0, c.width, c.height);
       if (!Array.isArray(S.lookbook)) S.lookbook = DEFAULT_LOOKBOOK;
-      S.lookbook[curLookIdx].img = await window.__uploadGlowImage(c, "lookbook", 0.75, S.lookbook[curLookIdx].img);
-      save();
-      toast("Foto OOTD berhasil dipasang di cermin lemarimu 👗");
-      if ($("#sheet").open) $("#sheet").close();
-      render();
+      try {
+        S.lookbook[curLookIdx].img = await window.__uploadGlowImage(c, "lookbook", 0.75, S.lookbook[curLookIdx].img);
+        save();
+        toast(S.lookbook[curLookIdx].img.startsWith("local:") ? "Foto disimpan dan menunggu sinkronisasi 📷" : "Foto OOTD berhasil dipasang di cermin lemarimu 👗");
+        if ($("#sheet").open) $("#sheet").close();
+        render();
+      } catch (e) { toast("Foto belum dapat disimpan. Coba lagi."); }
     };
     i.src = r.result;
   };
