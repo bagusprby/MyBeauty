@@ -63,24 +63,39 @@ export function showLogin({ supabase, signupAllowed, onSuccess }) {
   });
 }
 
-export function showImportChoice({ onImport, onStartFresh }) {
+export function showImportChoice({ onImport, onStartFresh, hasLocalBackup = true }) {
   const el = root();
   el.innerHTML = `
     <section class="auth-card import-card">
       <div class="auth-lace" aria-hidden="true">♡　♡　♡　♡　♡</div>
       <div class="auth-crest">A new chapter</div>
-      <h1>Data diary lama ditemukan</h1>
-      <p class="auth-copy">Sebelum impor, salinan JSON akan diunduh sebagai cadangan. Data lama di perangkat tetap disimpan sampai kamu menghapusnya sendiri.</p>
-      <button class="auth-primary" id="import-old">Impor data lama</button>
+      <h1>${hasLocalBackup ? "Data diary lama ditemukan" : "Mulai perjalananmu"}</h1>
+      <p class="auth-copy">${hasLocalBackup ? "Sebelum impor, salinan JSON akan diunduh sebagai cadangan. Data lama di perangkat tetap disimpan sampai kamu menghapusnya sendiri." : "Impor file cadangan dari aplikasi lama, atau mulai dengan lembar kosong."}</p>
+      <button class="auth-primary" id="import-old">${hasLocalBackup ? "Impor data lama" : "Pilih file cadangan JSON"}</button>
+      <input id="legacy-json-file" type="file" accept=".json,application/json" hidden>
       <button class="auth-secondary" id="start-fresh">Mulai lembar baru</button>
       <p class="auth-error" id="import-error" role="alert"></p>
-      <small class="auth-privacy">Impor hanya tersedia karena akun ini belum memiliki perjalanan tersimpan.</small>
+      <small class="auth-privacy">Impor hanya tersedia karena akun ini belum memiliki data tersimpan.</small>
     </section>`;
   const setBusy = button => { button.disabled = true; button.textContent = "Memindahkan data…"; };
   el.querySelector("#import-old").addEventListener("click", async event => {
+    if (!hasLocalBackup) { el.querySelector("#legacy-json-file").click(); return; }
     setBusy(event.currentTarget);
     try { await onImport(); }
     catch (error) { el.querySelector("#import-error").textContent = error.message || "Impor gagal. Data lokal tetap tersimpan; coba lagi."; event.currentTarget.disabled = false; event.currentTarget.textContent = "Coba impor lagi"; }
+  });
+  el.querySelector("#legacy-json-file").addEventListener("change", async event => {
+    const file = event.currentTarget.files?.[0]; if (!file) return;
+    const button = el.querySelector("#import-old"); setBusy(button);
+    try {
+      const parsed = JSON.parse(await file.text());
+      const state = parsed?.state && typeof parsed.state === "object" ? parsed.state : parsed;
+      if (!state || typeof state !== "object" || !("start" in state) || !("done" in state)) throw new Error("File bukan cadangan My Glow Up Era yang dikenali.");
+      await onImport(state);
+    } catch (error) {
+      el.querySelector("#import-error").textContent = error.message || "Impor gagal. File lokal tetap aman; coba lagi.";
+      button.disabled = false; button.textContent = "Coba impor file lagi";
+    }
   });
   el.querySelector("#start-fresh").addEventListener("click", async event => {
     setBusy(event.currentTarget);

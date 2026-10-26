@@ -18,7 +18,7 @@ Buat user pemilik melalui Supabase Authentication. Sesudah akun dibuat, matikan 
 
 ## Impor legacy
 
-Pastikan browser yang memiliki `glow30_v1` dapat dibuka. Login di deploy baru dengan akun yang belum berisi diary. Aplikasi menawarkan impor; tombol impor mengunduh JSON backup sebelum menulis ke Supabase, mengunggah base64 foto ke bucket, lalu menghitung ulang baris untuk verifikasi. Data localStorage lama tetap ada. Dari Profil, ekspor JSON kapan saja; tombol hapus salinan lama meminta konfirmasi terpisah.
+Jika browser baru berada di origin/domain berbeda, browser tidak dapat membaca localStorage origin lama. Dari aplikasi lama, unduh cadangan JSON melalui Profil → Pengaturan → Unduh Cadangan Arsip. Login di deploy baru dengan akun yang belum berisi diary, pilih file cadangan JSON, lalu aplikasi mengunduh salinan cadangan lagi sebelum menulis ke Supabase, mengunggah foto ke bucket, dan menghitung ulang baris/objek untuk verifikasi. Data localStorage lama tidak dihapus. Dari Profil, ekspor JSON kapan saja; tombol hapus salinan lokal meminta konfirmasi terpisah.
 
 ## Vercel
 

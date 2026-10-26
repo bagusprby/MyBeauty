@@ -68,10 +68,13 @@ async function activateUser(user) {
   loadLegacyApp();
   bindLocalCacheToUser(user.id, window.__glowApp.getState());
   await repo.initialize(window.__glowApp.getState, window.__glowApp.getDefaultState);
-  if (repo.pendingImportState && !repo.accountHasData) {
+  const firstCloudJourney = repo.user && !repo.journeyId && !repo.hadOwnedCache && !repo.pendingImportState && !repo.accountHasData;
+  if ((repo.pendingImportState && !repo.accountHasData) || firstCloudJourney) {
     showImportChoice({
-      onImport: async () => {
-        const source = structuredClone(repo.pendingImportState);
+      hasLocalBackup: !!repo.pendingImportState,
+      onImport: async uploadedState => {
+        const source = structuredClone(uploadedState || repo.pendingImportState);
+        if (!source) throw new Error("Pilih file cadangan terlebih dahulu.");
         exportState(source); // downloaded before any remote write
         await repo.importLegacyState(source);
         hideAuthScreen(); window.__glowApp.render();
