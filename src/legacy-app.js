@@ -2508,7 +2508,9 @@ function applyCardHierarchy(view) {
 }
 
 function render() {
-  const y = scrollY; checkAch(); syncThemeUI();
+  const y = scrollY;
+  try {
+  checkAch(); syncThemeUI();
   const mi = $("#mastIssue");
   if (mi) mi.textContent = `ISSUE NO. ${String(todayN()).padStart(2, "0")} · ${new Date().toLocaleDateString("id-ID", { month: "short", year: "numeric" }).toUpperCase()}`;
   $("#nav").innerHTML = TABS2.map(t => `<button class="${tab == t[0] ? "on" : ""}" onclick="go('${t[0]}')" aria-label="${t[2]}">${ico(t[1], 19)}${t[2]}</button>`).join("");
@@ -2518,6 +2520,13 @@ function render() {
   if (tab === "me") window.__glowProfileActions?.();
   cfSweep($("#main"));
   scrollTo(0, y);
+  } catch (error) {
+    console.error("My Glow Up Era render failed", error);
+    const main = $("#main");
+    if (main) main.innerHTML = `<section class="card app-error-card"><span class="eyebrow">Diary belum dapat dimuat</span><h2>Ada bagian data yang gagal dibuka</h2><p class="mut">Perubahan tersimpan di cache perangkat. Muat ulang aplikasi untuk mencoba lagi.</p><details><summary>Detail teknis</summary><pre>${E(error?.message || error)}</pre></details><button class="btn big" type="button" onclick="location.reload()">Muat ulang</button></section>`;
+    const nav = $("#nav");
+    if (nav && !nav.children.length) nav.innerHTML = TABS2.map(t => `<button class="${tab == t[0] ? "on" : ""}" onclick="go('${t[0]}')" aria-label="${t[2]}">${ico(t[1], 19)}${t[2]}</button>`).join("");
+  }
 }
 
 document.addEventListener("visibilitychange", () => { if (!document.hidden) render(); });

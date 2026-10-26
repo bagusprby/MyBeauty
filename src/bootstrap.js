@@ -109,8 +109,7 @@ if (!supabase) {
 } else {
   const { data: { session }, error } = await supabase.auth.getSession();
   if (session?.user && !error) await activateUser(session.user);
-  else showLogin({ supabase, signupAllowed, onSuccess: async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+  else showLogin({ supabase, signupAllowed, onSuccess: async user => {
     if (user) await activateUser(user);
   }});
 }

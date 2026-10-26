@@ -40,7 +40,7 @@ export function showLogin({ supabase, signupAllowed, onSuccess }) {
     event.preventDefault();
     const button = form.querySelector("button[type=submit]");
     button.disabled = true; button.textContent = "Memeriksa…";
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: el.querySelector("#auth-email").value.trim(),
       password: el.querySelector("#auth-password").value
     });
@@ -49,7 +49,14 @@ export function showLogin({ supabase, signupAllowed, onSuccess }) {
       button.disabled = false; button.textContent = "Masuk ke Diary";
       return;
     }
-    await onSuccess();
+    button.textContent = "Menyiapkan diary…";
+    try {
+      await onSuccess(data.user);
+    } catch (failure) {
+      el.querySelector("#auth-error").textContent = failure?.message || "Diary belum dapat dibuka. Coba lagi.";
+      button.disabled = false;
+      button.textContent = "Coba buka diary lagi";
+    }
   });
   el.querySelector("#auth-signup")?.addEventListener("click", async event => {
     const button = event.currentTarget;
