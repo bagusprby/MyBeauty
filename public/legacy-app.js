@@ -568,7 +568,7 @@ function renderCycleBanner() {
   const heroCream = getVanityByRole("moist", "Centella soothing cream");
   return `<div class="cycle-banner">
     <div class="mh">
-      <span class="eyebrow" style="color:#9e525d">🌸 Soft Cycle &amp; PMS Comfort Mode Active</span>
+      <span class="eyebrow">Soft Cycle &amp; PMS Comfort Mode Active</span>
       <button class="chip" style="padding:2px 8px;font-size:0.7rem" onclick="togglePeriodMode()">Matikan</button>
     </div>
     <h3>Tubuh &amp; kulitmu sedang butuh ekstra disayang</h3>
@@ -1018,10 +1018,10 @@ function renderRescueBanner(d) {
   if (S.rescue[d] || (!isLateNight && !isPostClass)) return "";
   const mode = isLateNight ? "night" : "class";
   return `<div class="rescue-banner">
-    <span class="eyebrow" style="color:#f4dfe1">${isLateNight ? "🌙 Late Night Scanlation Rescue" : "🌸 Post-Class Recovery"}</span>
+    <span class="eyebrow">${isLateNight ? "Late Night Scanlation Rescue" : "Post-Class Recovery"}</span>
     <h3>${isLateNight ? "Sudah selesai ngedit malam ini, cantik?" : "Baru sampai rumah habis kuliah?"}</h3>
     <p>${isLateNight ? "Aktifkan Penyelamat 2 Menit supaya kulitmu tetap kalem." : "Ambil jeda istirahatmu sebelum jam kerja pukul 20.00."}</p>
-    <button class="btn" style="background:#fffcf9;color:var(--ink);border:0" onclick="openRescueModal('${mode}')">Aktifkan Penyelamat 2 Menit →</button>
+    <button class="btn" onclick="openRescueModal('${mode}')">Aktifkan Penyelamat 2 Menit</button>
   </div>`;
 }
 
@@ -1246,143 +1246,158 @@ function allList(d) {
 }
 
 /* ===== Halaman 1: Beranda ===== */
-function vToday() {
-  const n = new Date(), d = todayN(), c = S.ci[d] || {}, p = prog(d), ph = phase(d);
-  const raw = Math.round((D0(n) - S.start) / 864e5) + 1;
-  const open = ciOpen ?? !(c.skip || (c.mood != null && c.energy != null));
-  const [grTitle, grSub] = greet(d);
-  const skTags = (S.skin[d] && S.skin[d].tags) || [];
-  const m = S.muse || dflt().muse;
-  const mainImg = m.custom ? (window.__photoUrl?.(m.custom) || m.custom) : MUSE_PRESETS[(m.preset || 0) % MUSE_PRESETS.length].img;
+const homeText = value => String(value ?? "").replace(/[\p{Extended_Pictographic}\uFE0E\uFE0F\u200D]/gu, "").trim();
 
-  let why = S.periodMode
+function homeRitualRow(h, d, bonus = false, scope = "main") {
+  const on = !!(S.done[d] || {})[h[0]], skipped = !!(S.skip[d] || {})[h[0]];
+  const skTags = (S.skin[d] && S.skin[d].tags) || [];
+  let title = h[2], customTip = h[5];
+  if (h[0] == "pm_moist") {
+    const prod = getVanityByRole("moist", null);
+    if (prod) title = `Malam: oleskan tipis ${prod}`;
+  } else if (h[0] == "pm_clean") {
+    const prod = getVanityByRole("clean", null);
+    if (prod) title = `Malam: cuci muka lembut (${prod})`;
+    if (skTags.includes("Iritasi") || skTags.includes("Kering")) customTip = "Kulit sensitif: cukup bilas air biasa tanpa digosok.";
+  } else if (h[0] == "spf") {
+    const prod = getVanityByRole("spf", null);
+    if (prod) title = `Pagi: pakai ${prod} (jika ke kampus/keluar)`;
+  }
+  const id = `home-ritual-${scope}-${d}-${h[0]}`;
+  const hasVideo = h[0] == "post1" || h[0] == "post_routine";
+  return `<div class="home-ritual-item ${on ? "is-done" : ""} ${skipped ? "is-skipped" : ""}">
+    <div class="home-ritual-row">
+      <input class="home-ritual-checkbox" id="${id}" type="checkbox" ${on ? "checked" : ""} onchange="toggle('${h[0]}',${d})" aria-label="Selesai: ${E(homeText(title))}">
+      <label class="home-ritual-label" for="${id}">${E(homeText(title))}${skipped ? '<small class="home-skip-state">Dilewati</small>' : ""}</label>
+      <span class="home-ritual-meta">${bonus ? "Bonus · opsional" : E(QN[QC(h)])}</span>
+      ${!on && !skipped ? `<button class="home-skip" type="button" onclick="skipQ('${h[0]}',${d})">Lewati</button>` : ""}
+    </div>
+    ${customTip ? `<small class="home-ritual-tip">${E(homeText(customTip))}</small>` : ""}
+    ${hasVideo ? `<button class="home-video-link" type="button" onclick="openMediaPlay('m1')">Video panduan Emi Wong</button>` : ""}
+  </div>`;
+}
+
+function homeMoodRow(lab, arr, key, d) {
+  return `<div class="home-checkin-row"><span>${lab}</span><div class="chips">${arr.map((item, i) => `<button class="chip ${S.ci[d] && S.ci[d][key] === i ? "on" : ""}" onclick="setCi(${d},'${key}',${i})">${item}</button>`).join("")}</div></div>`;
+}
+
+function homeAllList(d) {
+  const groups = {};
+  hab(d).forEach(h => (groups[QC(h)] = groups[QC(h)] || []).push(h));
+  return Object.keys(QN).filter(key => groups[key]).map(key => `<details class="home-archive-group" ${openCat[key] ? "open" : ""} ontoggle="openCat['${key}']=this.open">
+    <summary>${QN[key]} <small>${groups[key].filter(h => (S.done[d] || {})[h[0]]).length}/${groups[key].length}</small></summary>
+    ${groups[key].map(h => homeRitualRow(h, d, false, "archive")).join("")}
+  </details>`).join("");
+}
+
+function homeNookSummary() {
+  const books = S.books, current = books.cur, readToday = !!books.days[ymd()];
+  return `<section class="home-quiet-block home-nook">
+    <span class="eyebrow">Reading Nook · Streak ${bookStreak()}</span>
+    <h3>${current ? E(current.title) : "Pilih bacaan berikutnya"}</h3>
+    ${current ? `${bkBar(current)}<p>Hal ${current.currentPage || 0} dari ${current.totalPages || "?"}</p>` : `<p>${books.tbr.length} buku menunggu di rak keinginanmu</p>`}
+    <div class="home-quiet-actions">
+      <button type="button" class="home-text-action" onclick="bkCheck()">${readToday ? "Tercatat hari ini" : "Sudah baca hari ini"}</button>
+      ${current ? `<button type="button" class="home-text-action" onclick="bkAdd(1)">Tambah 1 halaman</button>` : ""}
+      <button type="button" class="home-text-action" onclick="go('diary')">Buka Nook</button>
+    </div>
+  </section>`;
+}
+
+function homeAuraSummary() {
+  return `<section class="home-quiet-block home-aura">
+    <span class="eyebrow">My Era Stats &amp; Aura</span>
+    <div class="home-aura-list">${calcAura().map(a => `<div><span>${E(a.name)}</span><b>${a.val}/10</b></div>`).join("")}</div>
+    <button type="button" class="home-text-action" onclick="openRecapCardModal()">Cetak Poster Edisi</button>
+  </section>`;
+}
+
+function homeJarSummary() {
+  const list = S.jar || [], latest = list[list.length - 1];
+  return `<section class="home-quiet-block home-proof-jar">
+    <span class="eyebrow">The Jar of Little Proofs</span>
+    <h3>Toples Bukti Kecilku (${list.length})</h3>
+    <p>${latest ? `Terbaru: “${E(homeText(latest.t))}” · Hari ${latest.d}` : "Simpan setiap kemenangan kecilmu."}</p>
+    <div class="home-quiet-actions">
+      <button type="button" class="home-text-action" onclick="openJarSheet(false)">Tambah bukti</button>
+      <button type="button" class="home-text-action" onclick="openJarSheet(true)">Ambil kenangan</button>
+    </div>
+  </section>`;
+}
+
+function vTodayQuiet() {
+  const d = todayN(), c = S.ci[d] || {}, open = ciOpen ?? !(c.skip || (c.mood != null && c.energy != null));
+  const skTags = (S.skin[d] && S.skin[d].tags) || [];
+  const spa = renderSpaCard(d);
+  let h = `<div class="home-quiet">
+    <section class="home-quiet-block home-checkin">
+      <span class="eyebrow">Daily Mood &amp; Energy</span>
+      ${open ? `${homeMoodRow("Suasana hati", MOOD, "mood", d)}${homeMoodRow("Energi", EN, "energy", d)}${homeMoodRow("Waktu luang", WAKTU, "time", d)}${homeMoodRow("Tipe hari", TIPE, "type", d)}
+        <div class="home-quiet-actions"><button type="button" class="home-text-action" onclick="ciOpen=false;fx.sig=null;render()">Simpan &amp; Sesuaikan</button><button type="button" class="home-text-action" onclick="cd(${d}).skip=1;ciOpen=false;save();render()">Lewati</button></div>`
+        : `<button class="home-checkin-summary" type="button" onclick="ciOpen=true;render()"><span>${c.mood != null ? `Mood: ${MOOD[c.mood]}` : "Check-in harian"}${c.energy != null ? ` · Energi: ${EN[c.energy]}` : ""}</span><span>Ubah</span></button>`}
+    </section>
+    ${skTags.length ? `<section class="home-quiet-block home-skin-note"><span class="eyebrow">Kulit Hari Ini · ${E(skTags.slice(0, 2).join(", "))}</span><p>Oleskan ${E(getVanityByRole("moist", "Centella soothing cream"))} dan biarkan tenang tanpa disentuh.</p></section>` : ""}
+    <section class="home-quiet-block home-fact">${renderWhisperCard().replace("↻ Fakta Lain", "Fakta Lain").replace(/>\s*([^<]*[\p{Extended_Pictographic}][^<]*)</gu, (_, value) => `>${homeText(value)}<`)}</section>
+    <section class="home-quiet-block home-links">
+      <span class="eyebrow">Pintasan</span>
+      <div class="home-quick-links">
+        <button type="button" onclick="go('act');sA='sk';render()">Etalase Rak</button>
+        <button type="button" onclick="go('act');sA='md';render()">Video &amp; Audio</button>
+        <button type="button" onclick="nowOpen()">Ide Sekarang</button>
+        <button type="button" onclick="openJarSheet(true)">Toples Bukti</button>
+      </div>
+    </section>
+    <section class="home-quiet-block home-reminder"><span class="eyebrow">Catatan hari ini</span><p>${E(homeText(F[d - 1]))}</p><small>${E(homeText(greet(d)[1]))}</small></section>
+    <section class="home-quiet-block home-schedule">${nextCard(d).replace(/[\p{Extended_Pictographic}\uFE0E\uFE0F\u200D]/gu, "")}</section>
+    ${spa ? `<section class="home-quiet-block home-spa">${spa.replace(/[\p{Extended_Pictographic}\uFE0E\uFE0F\u200D]/gu, "")}</section>` : ""}
+    ${homeNookSummary()}
+    ${homeAuraSummary()}
+    ${homeJarSummary()}
+    ${allOpen ? `<section class="home-quiet-block home-archive"><span class="eyebrow">Semua kebiasaan · Arsip</span>${homeAllList(d)}</section>` : ""}
+    <section class="home-quiet-block home-actions"><span class="eyebrow">Ritme yang kamu butuhkan</span><div class="home-quiet-actions">
+      <button type="button" class="home-text-action" onclick="nowOpen()">Sekarang Aku Enaknya Ngapain?</button>
+      <button type="button" class="home-text-action" onclick="setLow(${!S.lowMode})">${S.lowMode ? "Keluar mode malas" : "Hari ini lagi malas"}</button>
+      <button type="button" class="home-text-action" onclick="restDay(${d})">${S.rest[d] ? "Batalkan istirahat" : "Butuh istirahat"}</button>
+      ${S.lowMode ? `<button type="button" class="home-text-action" onclick="winLow()">${S.low[d] ? "Hari minimal menang" : "Hitung menang"}</button>` : ""}
+      <button type="button" class="home-text-action" onclick="allOpen=!allOpen;render()">${allOpen ? "Sembunyikan arsip" : `Lihat semua kebiasaan (${hab(d).length})`}</button>
+    </div></section>
+  </div>`;
+  return h;
+}
+
+function vToday() {
+  const d = todayN(), p = prog(d), ph = phase(d), m = S.muse || dflt().muse;
+  const [grTitle] = greet(d);
+  const mainImg = m.custom
+    ? (window.__photoUrl?.(m.custom) || m.custom)
+    : (MUSE_PRESETS[(m.preset || 0) % MUSE_PRESETS.length]?.img || "");
+  const why = S.periodMode
     ? "Mode Tamu Bulanan / PMS aktif—hanya langkah paling lembut & menenangkan yang ditampilkan."
     : p.q.low ? "Mode ringan aktif—cukup langkah terkecil hari ini." : p.q.bonus ? "Energimu baik, ada 1 ritual bonus opsional." : "Tiga ritual inti yang lembut hari ini.";
-
-  let h = `
-  <section class="boutique-wall">
-    <div class="wall-crest">
-      <span class="wall-crest-badge">My Glow Up Salon</span>
-    </div>
-    <div class="wall-collage">
-      <div class="wall-side">
-        <div class="mini-frame oval">${ART.swan}</div>
-        <div class="mini-frame">${ART.mirror}</div>
-      </div>
-      <div class="center-portrait" onclick="openMuseSheet()" title="Ketuk untuk ganti foto Muse">
-        <span class="portrait-ribbon">✦ ${raw > 30 ? "ISSUE 30+" : "DAY " + d + " OF 30"} ✦</span>
-        <div class="center-portrait-inner">
-          <img src="${mainImg}" alt="Muse Cover">
-        </div>
-      </div>
-      <div class="wall-side">
-        <div class="mini-frame">${ART.perfume}</div>
-        <div class="mini-frame oval">${ART.dressform}</div>
-      </div>
-    </div>
-    <div class="scallop-oval" style="padding:12px 14px;margin-bottom:6px">
-      <span class="eyebrow">${clk()}</span>
-      <div class="script" style="font-size:2.1rem">${E(grTitle)}</div>
-      <div class="serif" style="font-style:italic;font-size:1.05rem;color:var(--ink)">“${E(m.motto)}”</div>
-    </div>
-    <div class="pills">
-      <span class="pill" onclick="openMuseSheet()" style="cursor:pointer">📷 Ganti Foto Cover</span>
-      <span class="pill">✨ ${daysIn()} Hari Hadir</span>
-      <span class="pill">🌷 Streak ${streak()}</span>
+  const progress = Math.round((d / 30) * 100);
+  return `<section class="home-hero" aria-labelledby="home-hero-title">
+    <button class="home-hero-photo" type="button" onclick="openMuseSheet()" aria-label="Ganti foto Muse">
+      ${mainImg ? `<img src="${E(mainImg)}" alt="Foto Muse">` : `<span class="home-photo-placeholder">FOTO MUSE</span>`}
+    </button>
+    <div class="home-hero-content">
+      <span class="home-hero-eyebrow">${E(homeText(clk()))}</span>
+      <h1 id="home-hero-title">${E(homeText(grTitle))}</h1>
+      <p class="home-motto">“${E(m.motto || "")}"</p>
+      <div class="home-day-line"><span class="home-day-number">${d}</span><span class="home-day-total">/ 30 hari</span></div>
+      <div class="home-progress" role="progressbar" aria-label="Progres perjalanan 30 hari" aria-valuemin="1" aria-valuemax="30" aria-valuenow="${d}"><span style="width:${progress}%"></span></div>
+      <p class="home-hero-context">Streak ${streak()} hari · Minggu ${wkN(d)} · ${E(ph[2])}</p>
+      <button class="home-start" type="button" onclick="startRun()">Mulai ritual</button>
     </div>
   </section>
-
-  <div class="obj-shortcuts">
-    <button class="obj-btn" onclick="go('act');sA='sk';render()">
-      ${ART.cushion}
-      <span>Etalase Rak</span>
-    </button>
-    <button class="obj-btn" onclick="go('act');sA='md';render()">
-      ${ART.bow}
-      <span>Video &amp; Audio</span>
-    </button>
-    <button class="obj-btn" onclick="nowOpen()">
-      ${ART.teapot}
-      <span>Ide Sekarang</span>
-    </button>
-    <button class="obj-btn" onclick="openJarSheet(true)">
-      ${ART.heartBag}
-      <span>Toples Bukti</span>
-    </button>
-  </div>
-
-  <div class="notebook-card">
-    <div class="nb-lines">
-      <div>☆ • <b>pretty girl era.</b> • ☆</div>
-      <div>🩰 ${E(F[d - 1])}</div>
-      <div>♡ <i>${E(grSub)}</i></div>
-    </div>
-    <div class="nb-thumb">
-      <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80" alt="Journal Book">
-    </div>
-  </div>
-
-  ${renderWhisperCard()}
-  ${renderNookMini()}
   ${renderCycleBanner()}
   ${renderRescueBanner(d)}
-  ${nextCard(d)}
-  ${renderSpaCard(d)}
-  `;
-
-  if (open) {
-    h += `<div class="card paper">
-      <div class="washi"></div>
-      <div class="boutique-hdr"><span class="boutique-hdr-title">Daily Mood &amp; Energy</span></div>
-      ${chipRow("Suasana Hati", MOOD, "mood", d, ME)}
-      ${chipRow("Energi", EN, "energy", d)}
-      ${chipRow("Waktu Luang", WAKTU, "time", d)}
-      ${chipRow("Tipe Hari", TIPE, "type", d)}
-      <div class="row" style="margin-top:8px">
-        <button class="btn" onclick="ciOpen=false;fx.sig=null;render()">Simpan &amp; Sesuaikan</button>
-        <button class="btn ghost" onclick="cd(${d}).skip=1;ciOpen=false;save();render()">Lewati</button>
-      </div>
-    </div>`;
-  } else {
-    h += `<button class="sumr" onclick="ciOpen=true;render()">
-      <span>✦ ${c.mood != null ? ME[c.mood] + " Mood " + MOOD[c.mood] : "Check-in harian"} ${c.energy != null ? "· Energi " + EN[c.energy].toLowerCase() : ""}</span>
-      <u>Ubah</u>
-    </button>`;
-  }
-
-  if (skTags.length) {
-    const heroCream = getVanityByRole("moist", "Centella soothing cream");
-    h += `<div class="note">🌸 <b>Kulit Hari Ini (${skTags.slice(0, 2).join(", ")}):</b> Oleskan <b>${E(heroCream)}</b> dan biarkan tenang tanpa disentuh.</div>`;
-  }
-
-  h += `<div class="card">
-    <div class="mh">
-      <div>
-        <span class="eyebrow">${E(ph[2])}</span>
-        <h3>The Daily Edit · Ritual Pilihan</h3>
-      </div>
-      ${ring(p.p)}
-    </div>
-    <p class="why">${E(why)}</p>
-    ${p.q.main.map(x => qrow(x, d)).join("")}
-    ${p.q.bonus ? qrow(p.q.bonus, d, 1) : ""}
-    ${S.rest[d] ? '<p class="note">🌙 Tercatat sebagai <b>Hari Istirahat</b>.</p>' : ""}
-    ${S.rescue[d] ? '<p class="note">⚡ <b>Penyelamat 2 Menit</b> selesai hari ini.</p>' : ""}
-
-    <button class="btn-ed fill" onclick="startRun()"><span>Pandu Ritual Satu per Satu</span><span class="arr">→</span></button>
-    <button class="btn-ed" onclick="nowOpen()"><span>Sekarang Aku Enaknya Ngapain?</span><span class="arr">→</span></button>
-
-    <div class="lnks">
-      <button class="lk" onclick="allOpen=!allOpen;render()">${allOpen ? "Sembunyikan arsip" : "Lihat semua kebiasaan (" + hab(d).length + ")"}</button>
-      <button class="lk" onclick="setLow(${!S.lowMode})">${S.lowMode ? "Keluar mode malas" : "Hari ini lagi malas 🌙"}</button>
-      <button class="lk" onclick="restDay(${d})">${S.rest[d] ? "Batalkan istirahat" : "Butuh istirahat"}</button>
-      ${S.lowMode ? `<button class="lk" onclick="winLow()">${S.low[d] ? "✓ Hari minimal menang" : "Hitung menang"}</button>` : ""}
-    </div>
-  </div>`;
-
-  if (allOpen) h += allList(d);
-  h += renderAuraCard(true) + renderJarCard();
-  return h;
+  <section class="home-rituals" aria-labelledby="home-ritual-title">
+    <header class="home-ritual-header"><div><span class="eyebrow">${E(ph[2])}</span><h2 id="home-ritual-title">Ritual hari ini</h2></div><span class="home-ritual-count">${p.n} dari ${p.t}</span></header>
+    <p class="home-ritual-note">${E(why)}</p>
+    <div class="home-ritual-list">${p.q.main.map(h => homeRitualRow(h, d)).join("")}${p.q.bonus ? homeRitualRow(p.q.bonus, d, true) : ""}</div>
+    ${S.rest[d] ? '<p class="home-status-note">Tercatat sebagai <b>Hari Istirahat</b>.</p>' : ""}
+    ${S.rescue[d] ? '<p class="home-status-note"><b>Penyelamat 2 Menit</b> selesai hari ini.</p>' : ""}
+  </section>`;
 }
 
 function sheet(h) {
@@ -2484,6 +2499,7 @@ function toggleTheme() {
 function go(t) { tab = t; if (t == "today" || t == "diary" || (t == "journey" && sel < 1)) sel = todayN(); render(); scrollTo(0, 0); }
 
 function applyCardHierarchy(view) {
+  if (view === "today") return;
   const root = $("#main"), nodes = [...root.children];
   if (!nodes.length) return;
   let hero = nodes.find(el => el.matches(".boutique-wall,.coq-frame,.card,.whisper,.nx,.notebook-card")) || nodes[0];
@@ -2515,11 +2531,12 @@ function render() {
   const y = scrollY;
   try {
   checkAch(); syncThemeUI();
+  document.body.dataset.activeTab = tab;
   $("#nav").innerHTML = `<div class="sidebar-brand">Glow Up Era</div>${TABS2.map(([key, label]) => `<button class="${tab == key ? "on" : ""}" onclick="go('${key}')" aria-label="${label}" aria-current="${tab == key ? "page" : "false"}">${label}</button>`).join("")}`;
   $("#main").innerHTML = { today: vToday, journey: vJourney, act: vAct, diary: vJournal, me: vMe }[tab]();
   syncThemeUI();
   applyCardHierarchy(tab);
-  const rail = $("#quiet-rail"); if (rail) rail.innerHTML = `<h2 class="eyebrow rail-title">Ringkasan</h2>${window.__glowApp?.getQuietHTML?.() || ""}`;
+  const rail = $("#quiet-rail"); if (rail) rail.innerHTML = `<h2 class="eyebrow rail-title">Ringkasan</h2>${tab === "today" ? vTodayQuiet() : (window.__glowApp?.getQuietHTML?.() || "")}`;
   if (tab === "me") window.__glowProfileActions?.();
   cfSweep($("#main"));
   scrollTo(0, y);

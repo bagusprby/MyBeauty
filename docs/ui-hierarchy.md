@@ -117,6 +117,16 @@ Perubahan file fase ini: `index.html`, `public/legacy-app.js`, `src/bootstrap.js
 
 Perubahan kontrak shell: `mastIssue` sudah dihapus bersama masthead lama. `themeBtn`, `themeIco`, dan `themeTxt` sekarang baru dibuat saat Profil → Pengaturan dirender; fungsi `syncThemeUI()` tetap memperbarui ketiganya.
 
+## Fase 2 — Beranda
+
+- Urutan Beranda sekarang: hero Muse → banner siklus/rescue hanya saat aktif → checklist ritual → konten pendukung dan arsip. Di mobile konten pendukung tampil setelah checklist; di desktop konten itu mengisi rail kanan.
+- Hero tunggal memakai foto Muse yang dipilih atau diunggah, dengan sumber signed URL yang sama dan fallback ilustrasi gambar yang gagal. Foto menjadi blok 180 px di atas pada mobile dan kolom 240 px di kiri pada desktop. Hero menampilkan sapaan, motto, hari 30 hari, progres, streak/chapter, dan tombol `Mulai ritual` yang tetap menjalankan `startRun()`.
+- Primary `Ritual hari ini` memakai checkbox native yang tetap memanggil `toggle()`, tautan `Lewati` yang memanggil `skipQ()`, tip khusus produk/kulit, dan video panduan. Angka selesai memakai hasil `prog()` (`p.n` dan `p.t`), bukan angka tetap 5: jumlah ritual inti berubah mengikuti hari, mode ringan, dan ritual yang dilewati; bonus tetap ditandai opsional dan tidak mengubah hitungan lama.
+- Data kebiasaan `H` tidak memiliki jam per ritual: nilai `h[3]` adalah hari mulai kebiasaan, bukan jam. Agar tidak menampilkan waktu rekaan, sisi kanan baris menampilkan kategori kebiasaan yang sudah ada di `QN`.
+- Kontrol check-in, catatan kulit, fakta, pintasan, jadwal, spa, Reading Nook, aura, toples bukti, dan arsip tetap tersedia sebagai konten Quiet tanpa bingkai/shadow kartu lama. Perilaku `setCi`, `nextFact`, `toggleOvr`, `togglePeriodMode`, `pickSpa`, `bkCheck`, `bkAdd`, `addJarProof`, serta kontrol yang lain tetap menggunakan handler lama.
+- Beranda secara eksplisit melewati `applyCardHierarchy()` yang lama karena urutan mobile/desktop sekarang dirender langsung; tab lain belum berubah di fase ini.
+- Verifikasi: `npm test` lulus (2 tes), `npm run build` lulus, `node --check public/legacy-app.js` dan `git diff --check` lulus. Screenshot viewport 390 px dan 1280 px belum dapat diambil: pratinjau browser terisolasi meminta login dan sesi Chrome pengguna tidak dapat dipilih pada pemeriksaan ini.
+
 ## Fase berikutnya
 
-Fase 2 menata urutan dan bobot kartu sesuai hierarki per tab setelah token mode gelap ini disetujui.
+Fase 3 menata Perjalanan, Aktivitas, Diary, dan Profil dengan hierarki yang sama, sesuai pemetaan yang sudah dicatat di bagian audit.
