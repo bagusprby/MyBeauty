@@ -176,6 +176,8 @@ body[data-active-tab="me"] #main .profile-schedule > .card { margin: 0; }
     align-items: center;
     gap: 8px;
     margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
   }
   .journey-focus .day-nav > button { min-width: 0; padding-inline: 8px; white-space: nowrap; }
   .journey-focus .day-nav > button:first-child { justify-self: start; }
