@@ -1,0 +1,52 @@
+#app-splash {
+  background: var(--bg, #faf7f5);
+  color: var(--ink, #2b2426);
+}
+
+.splash-content {
+  display: flex;
+  width: min(100%, 320px);
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.splash-heart {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid var(--line-strong, #d9babe);
+  border-radius: 50%;
+  color: var(--accent, #bd7184);
+  font: 36px/1 var(--font-display, "Cormorant Garamond", serif);
+}
+
+.splash-crest {
+  margin: 0;
+  color: var(--ink, #2b2426);
+  font: 600 34px/1.05 var(--font-display, "Cormorant Garamond", serif);
+}
+
+.splash-loader {
+  width: 30px;
+  height: 30px;
+  margin-top: 14px;
+  border: 2px solid var(--line, #eadbd8);
+  border-top-color: var(--accent, #bd7184);
+  border-radius: 50%;
+  animation: splash-spin .8s linear infinite;
+}
+
+.splash-caption {
+  color: var(--muted, #796d70);
+  font: 500 13px/1.4 var(--font-body, Inter, sans-serif);
+  letter-spacing: .02em;
+}
+
+@keyframes splash-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-loader { animation-duration: 2s; }
+}

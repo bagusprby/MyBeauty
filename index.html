@@ -16,9 +16,21 @@
       body { margin: 0; padding: 0; font: 15px/1.5 var(--font-body, Inter, sans-serif); background: var(--bg, #FAF7F5); color: var(--ink, #2B2426); }
       img { max-width: 100%; }
       [hidden]:not([hidden=until-found i]) { display: none !important; }
+      #app-splash { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top, 0px)) 24px max(24px, env(safe-area-inset-bottom, 0px)); background: #FAF7F5; color: #2B2426; transition: opacity .24s ease, visibility .24s ease; }
+      #app-splash.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
+      @media (prefers-color-scheme: dark) { #app-splash { background: #1b1719; color: #f7f0ef; } }
+      @media (prefers-reduced-motion: reduce) { #app-splash { transition: none; } }
     </style>
   </head>
   <body>
+    <div id="app-splash" role="status" aria-live="polite" aria-label="Menyiapkan My Glow Up Era">
+      <div class="splash-content">
+        <span class="splash-heart" aria-hidden="true">♡</span>
+        <p class="splash-crest">My Glow Up Era</p>
+        <span class="splash-loader" aria-hidden="true"></span>
+        <span class="splash-caption">Menyiapkan ruangmu…</span>
+      </div>
+    </div>
     <nav class="nav" id="nav" aria-label="Navigasi utama"></nav>
     <div class="wrap">
       <main id="main"></main>

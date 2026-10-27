@@ -14,8 +14,17 @@ import "./styles/home.css";
 import "./styles/tabs.css";
 import "./styles/reference-layout.css";
 import "./styles/interactions-nav.css";
+import "./styles/splash-screen.css";
 
 window.__GLOW_ART = ART;
+function finishSplash() {
+  const splash = document.getElementById("app-splash");
+  if (!splash) return;
+  splash.classList.add("is-leaving");
+  splash.setAttribute("aria-hidden", "true");
+  setTimeout(() => splash.remove(), 280);
+}
+
 let repo;
 let legacyLoaded = false;
 repo = new GlowRepository(supabase, { onStatus: status => setSyncStatus(status, repo) });
@@ -108,10 +117,12 @@ async function activateUser(user) {
         hideAuthScreen(); window.__glowApp.render();
       }
     });
+    finishSplash();
     return;
   }
   hideAuthScreen();
   window.__glowApp.render();
+  finishSplash();
   if (repo.user && !repo.journeyId && !repo.hadOwnedCache) {
     await repo.startNewJourney(window.__glowApp.getState());
     repo.dirty = new Set(["settings", "journey", "daily", "weekly", "achievements", "jar", "photos", "vanity", "lookbook", "media", "books", "fx"]);
@@ -123,15 +134,21 @@ try {
   if (!supabase) {
     await loadLegacyApp();
     await repo.initialize(window.__glowApp.getState, window.__glowApp.getDefaultState);
+    window.__glowApp.render();
+    finishSplash();
   } else {
     const { data: { session }, error } = await supabase.auth.getSession();
     if (error) throw error;
     if (session?.user) await activateUser(session.user);
-    else showLogin({ supabase, signupAllowed, onSuccess: async user => {
-      if (user) await activateUser(user);
-    }});
+    else {
+      showLogin({ supabase, signupAllowed, onSuccess: async user => {
+        if (user) await activateUser(user);
+      }});
+      finishSplash();
+    }
   }
 } catch (error) {
   console.error("My Glow Up Era startup failed", error);
+  finishSplash();
   showBootFailure(error);
 }
