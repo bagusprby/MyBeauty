@@ -171,3 +171,10 @@ PDF `My Glow Up Era — Redesain Minimalis full` dipakai sebagai acuan visual un
 - Token warna terang yang sudah ada sama dengan palet referensi (krem, tinta arang, aksen rose); token dark mode tetap berjalan. Font dan isi/data contoh tidak disalin dari artboard.
 
 Verifikasi Fase 4: `npm test` lulus (2 tes), `npm run build` berhasil (65 modul), `node --check public/legacy-app.js` lulus, dan `git diff --check` lulus. Browser lokal diperiksa pada mode gelap dengan viewport desktop sekitar 920 × 743 px; tampilan Perjalanan, Aktivitas, Diary, dan Profil terlihat. Mode terang dan breakpoint mobile belum diperiksa secara visual.
+
+## Fase 5 — QA responsif dan kontras
+
+- Browser lokal diperiksa lagi di Aktivitas pada skala sempit sampai breakpoint mobile aktif: navbar berubah menjadi lima tab fixed di bawah, katalog tetap satu kolom, dan tidak terlihat scroll horizontal. Ini pemeriksaan visual lewat zoom browser, bukan ukuran perangkat terukur; lebar 390 px belum diverifikasi.
+- Rasio kontras dihitung dari pasangan token teks/latar yang dipakai bersama: mode terang `ink/bg 14.23:1`, `muted/bg 5.59:1`, `accent/bg 5.45:1`, dan teks hero `14.23:1`; mode gelap `ink/bg 17.15:1`, `muted/bg 10.17:1`, `accent/bg 6.61:1`, dan teks hero `14.23:1`. Pasangan token utama tersebut memenuhi AA untuk teks normal (4.5:1). Perhitungan ini tidak mencakup seluruh warna hard-code atau setiap kondisi hover/disabled.
+- Mode terang belum dapat diperiksa secara visual pada browser lokal, sehingga pemeriksaan ini tidak mengklaim semua keadaan visual telah lulus.
+- Perintah akhir: `npm test` lulus (2 tes), `npm run build` berhasil (65 modul), `node --check public/legacy-app.js` lulus, dan `git diff --check` lulus.
