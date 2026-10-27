@@ -89,7 +89,7 @@
   cursor: pointer;
 }
 .home-ritual-tip { display: block; margin: -2px 0 9px 30px; color: var(--muted); font: 400 12px/1.45 var(--font-body); }
-.home-video-link { margin: -4px 0 6px 30px; text-align: left; text-decoration: underline; }
+.home-video-link { margin: 0 0 8px 30px; padding: 7px 12px; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--surface); color: var(--accent); text-align: left; text-decoration: none; }
 .home-status-note { margin: 10px 0 0; color: var(--muted); font: 400 13px/1.4 var(--font-body); }
 
 /* Active status blocks stay in the main column, immediately after the hero. */
@@ -154,39 +154,46 @@
 .home-quiet .whisper::before { display: none; }
 .home-quiet .whisper p { margin: 6px 0; color: var(--ink); font: 400 14px/1.5 var(--font-body); font-style: normal; }
 .home-quiet .whisper .row { gap: 8px; }
-.home-quiet .whisper .chip { min-height: 44px; border: 0; background: transparent; color: var(--accent); text-decoration: underline; }
-.home-quiet .home-quiet-actions { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; }
+.home-quiet .whisper .chip { min-height: 44px; padding: 7px 12px; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--surface); color: var(--accent); text-decoration: none; }
+.home-quiet .home-quiet-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 8px; margin-top: 8px; }
 .home-text-action {
-  min-height: 44px;
-  padding: 8px 0;
-  border: 0;
-  background: transparent;
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
   color: var(--accent);
-  font: 500 13px/1.3 var(--font-body);
+  font: 600 13px/1.35 var(--font-body);
   text-align: left;
-  text-decoration: underline;
+  text-decoration: none;
   cursor: pointer;
 }
-.home-quick-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; margin-top: 4px; }
+.home-text-action:hover { border-color: var(--accent-soft); background: var(--blush-soft); }
+.home-quick-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
 .home-quick-links button {
   min-width: 0;
-  min-height: 44px;
-  padding: 7px 0;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  background: transparent;
-  color: var(--ink);
-  font: 500 13px/1.3 var(--font-body);
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--accent);
+  font: 600 13px/1.35 var(--font-body);
   text-align: left;
   cursor: pointer;
 }
+.home-quick-links button:hover { border-color: var(--accent-soft); background: var(--blush-soft); }
 .home-checkin-row { padding: 8px 0; border-bottom: 1px solid var(--line); }
 .home-checkin-row > span { display: block; margin-bottom: 2px; color: var(--muted); font: 600 11px/1.35 var(--font-body); letter-spacing: .04em; text-transform: uppercase; }
 .home-checkin-row .chips { gap: 4px; margin: 0; }
 .home-checkin .chip { min-height: 44px; padding: 7px 10px; border-color: var(--line); background: transparent; color: var(--ink); font: 500 12px/1.25 var(--font-body); }
 .home-checkin .chip.on { border-color: var(--accent); background: var(--accent); color: var(--bg); }
 .home-checkin-summary { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 6px 0; border: 0; background: transparent; color: var(--ink); font: 500 14px/1.4 var(--font-body); text-align: left; cursor: pointer; }
-.home-checkin-summary span:last-child { flex: none; color: var(--accent); text-decoration: underline; }
+.home-checkin-summary span:last-child { flex: none; padding: 6px 11px; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--surface); color: var(--accent); font-size: 12px; }
 .home-nook .bk-top { display: block; margin: 4px 0; }
 .home-nook .bk-top > svg { display: none; }
 .home-nook .rbar { height: 4px; margin: 5px 0; border: 0; background: var(--line); }

@@ -191,3 +191,8 @@ Verifikasi Fase 4: `npm test` lulus (2 tes), `npm run build` berhasil (65 modul)
 - Beranda mempertahankan hero, CTA ritual, checklist, dan check-in sebagai fokus awal. Ringkasan, pintasan, fakta, jadwal, serta koleksi sekunder kini berada di disclosure “Lihat ringkasan & pintasan” agar halaman awal lebih mudah dipindai.
 - Keterangan mode pada ritual dipersingkat. Di Perjalanan, deskripsi header dihapus; catatan dan milestone dipindahkan ke disclosure, dan tersedia CTA “Lihat checklist”.
 - Checklist Perjalanan kini memiliki judul ringkas dan hitungan progres. Tidak ada rumus progres atau handler data yang diubah.
+
+## Fase 8 — aksi tanpa underline
+
+- Underline dihilangkan dari tombol aksi/tautan bergaya tombol. Aksi ringkasan Beranda dan pintasan kini memakai permukaan kartu ringan dengan border hairline, radius konsisten, dan hover blush; aksi check-in memakai badge pill.
+- Tombol video panduan dan kontrol `.lk` memakai treatment tanpa underline yang jelas sebagai kontrol interaktif.
