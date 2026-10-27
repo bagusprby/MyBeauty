@@ -300,3 +300,63 @@ body[data-active-tab="me"] #toast { border: 1px solid var(--line); box-shadow: n
   .activity-content .media-card-vis { grid-template-columns: 1fr; }
   .activity-content .media-thumb { aspect-ratio: 16 / 9; }
 }
+
+/* Remove nested frames inside an already framed primary surface. */
+body[data-active-tab="journey"] #main .tier-primary .card,
+body[data-active-tab="act"] #main .tier-primary .card,
+body[data-active-tab="diary"] #main .tier-primary .card,
+body[data-active-tab="me"] #main .tier-primary .card {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.journey-map .ms { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; }
+.journey-map .ms:last-child { border-bottom: 0; }
+.journey-map { padding: 8px 20px; }
+.activity-content .mirror-card { border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.activity-content .vanity-grid .mirror-card,
+.diary-wardrobe .mirror-card { border-bottom: 1px solid var(--line); }
+.diary-wardrobe .mirror-card { border-right: 0; border-bottom: 1px solid var(--line); border-left: 0; border-top: 0; background: transparent; }
+body[data-active-tab="journey"] #main .tier-quiet,
+body[data-active-tab="act"] #main .tier-quiet,
+body[data-active-tab="diary"] #main .tier-quiet,
+body[data-active-tab="me"] #main .tier-quiet { padding-block: 18px; }
+
+/* The proof jar used to retain an empty icon grid track on desktop. */
+.journey-keepsake > .card,
+.diary-jar { width: 100%; min-width: 0; align-self: stretch; }
+.journey-keepsake .jar-box,
+.diary-jar .jar-box { display: block; width: 100%; min-width: 0; }
+.journey-keepsake .jar-box > div:last-child,
+.diary-jar .jar-box > div:last-child { width: 100%; min-width: 0; }
+.journey-keepsake .jar-box h3,
+.diary-jar .jar-box h3 { overflow-wrap: anywhere; }
+.journey-keepsake .jar-box .row,
+.diary-jar .jar-box .row { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+
+/* Keep the desktop sidebar pinned while the main column scrolls. */
+@media (min-width: 1024px) {
+  .nav {
+    position: fixed;
+    inset: 24px auto 24px max(16px, calc((100vw - 1344px) / 2));
+    grid-area: auto;
+    align-self: auto;
+    width: 232px;
+    height: auto;
+    min-height: 0;
+    max-height: calc(100vh - 48px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 12px 0;
+    border: 0;
+    border-right: 1px solid var(--line);
+    border-radius: 0;
+    background: var(--bg);
+    box-shadow: none;
+    z-index: 30;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .nav { left: 16px; width: 200px; }
+}

@@ -153,3 +153,9 @@ Markup setiap tab kini memberi tier secara eksplisit. `applyCardHierarchy()` tid
 Judul konteks dan navigasi subtabs selalu tampil sebelum konten. Urutan data dan kontrol hanya diubah pada tab yang ditampilkan; seluruh handler lama tetap menjadi tujuan aksi. Dialog, sheet, dan toast mengikuti permukaan yang sama tanpa ornamen tambahan.
 
 Verifikasi Fase 3: `npm test` lulus (2 tes), `npm run build` berhasil (64 modul), `node --check public/legacy-app.js` dan `git diff --check` lulus. Pemeriksaan visual dan uji interaksi manual pada browser belum dilakukan. Fase 4 berikutnya berisi pembersihan kelas/aset lama, pemeriksaan responsif, uji fungsi manual, dan verifikasi akhir.
+
+### Perbaikan visual lanjutan dari tangkapan layar
+
+- Permukaan bertingkat dirapikan dengan menghapus bingkai bersarang pada peta perjalanan dan slot Lookbook; panel utama tetap satu permukaan dan bagian Quiet memakai pemisah saja.
+- Toples Bukti memakai lebar penuh pada Perjalanan/Diary. Penyebab tampilan desktop yang sempit adalah grid lama tetap menempatkan teks di kolom pertama 88 px setelah ilustrasi toples disembunyikan.
+- Sidebar desktop kini `position: fixed` dengan ruang kolom shell tetap disediakan; navigasi mobile juga tetap fixed di bawah layar.
