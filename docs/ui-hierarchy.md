@@ -178,3 +178,10 @@ Verifikasi Fase 4: `npm test` lulus (2 tes), `npm run build` berhasil (65 modul)
 - Rasio kontras dihitung dari pasangan token teks/latar yang dipakai bersama: mode terang `ink/bg 14.23:1`, `muted/bg 5.59:1`, `accent/bg 5.45:1`, dan teks hero `14.23:1`; mode gelap `ink/bg 17.15:1`, `muted/bg 10.17:1`, `accent/bg 6.61:1`, dan teks hero `14.23:1`. Pasangan token utama tersebut memenuhi AA untuk teks normal (4.5:1). Perhitungan ini tidak mencakup seluruh warna hard-code atau setiap kondisi hover/disabled.
 - Mode terang belum dapat diperiksa secara visual pada browser lokal, sehingga pemeriksaan ini tidak mengklaim semua keadaan visual telah lulus.
 - Perintah akhir: `npm test` lulus (2 tes), `npm run build` berhasil (65 modul), `node --check public/legacy-app.js` lulus, dan `git diff --check` lulus.
+
+## Fase 6 — navbar dan interaksi
+
+- Navbar mobile kini berupa dock melayang berisi lima ikon dan label, dengan permukaan transparan/blur, sudut bulat, jarak dari safe-area bawah, dan ruang konten agar dock tidak menutupi isi.
+- Navbar desktop menjadi rail vertikal dengan ikon, label, brand, permukaan lembut, serta item aktif yang jelas. Markup mempertahankan `go()` dan `aria-current` yang sudah ada.
+- Tombol menerima hover lift untuk pointer, pressed state untuk sentuhan, focus-visible, serta dukungan reduced motion. Tidak ada handler atau logika data yang diubah.
+- Verifikasi: `npm test` lulus (2 tes), `npm run build` berhasil (66 modul), `node --check public/legacy-app.js` dan `git diff --check` lulus. Pemeriksaan visual browser belum dilakukan pada fase ini.

@@ -13,6 +13,7 @@ import "./styles/shell.css";
 import "./styles/home.css";
 import "./styles/tabs.css";
 import "./styles/reference-layout.css";
+import "./styles/interactions-nav.css";
 
 window.__GLOW_ART = ART;
 let repo;

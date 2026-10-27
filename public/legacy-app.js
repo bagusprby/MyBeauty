@@ -2483,6 +2483,16 @@ function vMe() {
 }
 
 const TABS2 = [["today", "Hari ini"], ["journey", "Perjalanan"], ["act", "Aktivitas"], ["diary", "Diary"], ["me", "Profil"]];
+const NAV_ICONS = {
+  today: `<path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/>`,
+  journey: `<path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.2"/>`,
+  act: `<path d="M6 4v16M18 4v16M3 9v6M21 9v6M6 12h12"/>`,
+  diary: `<path d="M12 7v14M3 5c3-1 6-.3 9 2v14c-3-2-6-3-9-2V5Zm18 0c-3-1-6-.3-9 2v14c3-2 6-3 9-2V5Z"/>`,
+  me: `<circle cx="12" cy="8" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0"/>`
+};
+function navMarkup() {
+  return `<div class="sidebar-brand">Glow Up Era</div>${TABS2.map(([key, label]) => `<button class="${tab == key ? "on" : ""}" onclick="go('${key}')" aria-label="${label}" aria-current="${tab == key ? "page" : "false"}"><span class="nav-icon-wrap"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NAV_ICONS[key]}</svg></span><span class="nav-label">${label}</span></button>`).join("")}`;
+}
 
 function syncThemeUI() {
   const dk = matchMedia("(prefers-color-scheme:dark)").matches;
@@ -2512,7 +2522,7 @@ function render() {
   try {
   checkAch(); syncThemeUI();
   document.body.dataset.activeTab = tab;
-  $("#nav").innerHTML = `<div class="sidebar-brand">Glow Up Era</div>${TABS2.map(([key, label]) => `<button class="${tab == key ? "on" : ""}" onclick="go('${key}')" aria-label="${label}" aria-current="${tab == key ? "page" : "false"}">${label}</button>`).join("")}`;
+  $("#nav").innerHTML = navMarkup();
   $("#main").innerHTML = { today: vToday, journey: vJourney, act: vAct, diary: vJournal, me: vMe }[tab]();
   document.body.dataset.activeSubtab = tab === "act" ? sA : tab === "me" ? sP : "";
   syncThemeUI();
@@ -2526,7 +2536,7 @@ function render() {
     const main = $("#main");
     if (main) main.innerHTML = `<section class="card app-error-card"><span class="eyebrow">Diary belum dapat dimuat</span><h2>Ada bagian data yang gagal dibuka</h2><p class="mut">Perubahan tersimpan di cache perangkat. Muat ulang aplikasi untuk mencoba lagi.</p><details><summary>Detail teknis</summary><pre>${E(error?.message || error)}</pre></details><button class="btn big" type="button" onclick="location.reload()">Muat ulang</button></section>`;
     const nav = $("#nav");
-    if (nav && !nav.children.length) nav.innerHTML = `<div class="sidebar-brand">Glow Up Era</div>${TABS2.map(([key, label]) => `<button class="${tab == key ? "on" : ""}" onclick="go('${key}')" aria-label="${label}" aria-current="${tab == key ? "page" : "false"}">${label}</button>`).join("")}`;
+    if (nav && !nav.children.length) nav.innerHTML = navMarkup();
   }
 }
 
