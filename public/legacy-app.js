@@ -513,7 +513,16 @@ function save() {
 }
 
 const todayN = () => Math.min(30, Math.max(1, Math.round((D0(new Date()) - S.start) / 864e5) + 1));
-let sel = todayN(), tab = "today", pop = null, ciOpen, allOpen = false, openCat = {}, sA = "fx", sP = "kol", ed = 1, ni = -1, mCat = "all", curVanityIdx = 0, curLookIdx = 0, scheduleEditorOpen = false;
+const SCHEDULE_DAY_KEY = "glow30_schedule_day_ui_v1";
+function getScheduleDay() {
+  try {
+    const saved = sessionStorage.getItem(SCHEDULE_DAY_KEY);
+    if (saved === null) return 1;
+    const value = Number(saved);
+    return Number.isInteger(value) && value >= 0 && value <= 6 ? value : 1;
+  } catch { return 1; }
+}
+let sel = todayN(), tab = "today", pop = null, ciOpen, allOpen = false, openCat = {}, sA = "fx", sP = "kol", ed = getScheduleDay(), ni = -1, mCat = "all", curVanityIdx = 0, curLookIdx = 0, scheduleEditorOpen = false;
 
 const dateOf = d => new Date(S.start + (d - 1) * 864e5).toLocaleDateString("id-ID", { weekday: "short", month: "short", day: "numeric" });
 const dow = d => new Date(S.start + (d - 1) * 864e5).getDay();
@@ -2427,10 +2436,18 @@ function selectScheduleDay(day) {
   const currentStrip = document.querySelector(".schedule-day-strip");
   const scrollLeft = currentStrip?.scrollLeft || 0;
   ed = Number(day);
+  try { sessionStorage.setItem(SCHEDULE_DAY_KEY, String(ed)); } catch { /* keep selection in memory */ }
   render();
   requestAnimationFrame(() => {
     const nextStrip = document.querySelector(".schedule-day-strip");
-    if (nextStrip) nextStrip.scrollLeft = scrollLeft;
+    const selected = nextStrip?.querySelector(".schedule-day-btn.sel");
+    if (!nextStrip || !selected) return;
+    const stripRect = nextStrip.getBoundingClientRect();
+    const selectedRect = selected.getBoundingClientRect();
+    let targetLeft = scrollLeft;
+    if (selectedRect.left < stripRect.left) targetLeft += selectedRect.left - stripRect.left;
+    else if (selectedRect.right > stripRect.right) targetLeft += selectedRect.right - stripRect.right;
+    nextStrip.scrollLeft = Math.max(0, targetLeft);
   });
 }
 

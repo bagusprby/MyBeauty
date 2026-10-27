@@ -12,7 +12,7 @@ body[data-active-tab="diary"] #main > .diary-reading-add,
 .schedule-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .schedule-heading h2 { margin: 3px 0 0; color: var(--ink); font: 600 25px/1.15 var(--font-display); }
 .schedule-edit-cta { flex: none; min-height: 44px; border-radius: var(--r-pill); }
-.schedule-day-strip { display: flex; gap: 8px; margin: 16px -2px 14px; padding: 2px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; scroll-snap-type: x mandatory; }
+.schedule-day-strip { display: flex; gap: 8px; margin: 16px -2px 14px; padding: 2px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: none; scroll-snap-type: x proximity; }
 .schedule-day-strip::-webkit-scrollbar { display: none; }
 .schedule-day-btn { display: flex; flex: 0 0 80px; min-height: 62px; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 7px 8px; border: 1px solid var(--line); border-radius: 16px; background: var(--bg); color: var(--muted); font: 600 13px/1.2 var(--font-body); scroll-snap-align: start; }
 .schedule-day-btn small { color: inherit; font: 400 10px/1.25 var(--font-body); }
