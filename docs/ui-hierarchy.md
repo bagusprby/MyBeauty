@@ -127,6 +127,29 @@ Perubahan kontrak shell: `mastIssue` sudah dihapus bersama masthead lama. `theme
 - Beranda secara eksplisit melewati `applyCardHierarchy()` yang lama karena urutan mobile/desktop sekarang dirender langsung; tab lain belum berubah di fase ini.
 - Verifikasi: `npm test` lulus (2 tes), `npm run build` lulus, `node --check public/legacy-app.js` dan `git diff --check` lulus. Screenshot viewport 390 px dan 1280 px belum dapat diambil: pratinjau browser terisolasi meminta login dan sesi Chrome pengguna tidak dapat dipilih pada pemeriksaan ini.
 
-## Fase berikutnya
+## Fase 3 — tab selain Beranda
 
-Fase 3 menata Perjalanan, Aktivitas, Diary, dan Profil dengan hierarki yang sama, sesuai pemetaan yang sudah dicatat di bagian audit.
+Markup setiap tab kini memberi tier secara eksplisit. `applyCardHierarchy()` tidak lagi menebak tier dari elemen pertama, sehingga judul halaman atau tab tidak berubah menjadi hero hanya karena urutan DOM.
+
+| Tab / blok | Tier | Urutan dan alasan |
+|---|---|---|
+| Perjalanan — judul Chronicle dan konteks hari terpilih | Heading | Memberi konteks tanpa membuat hero kedua. |
+| Perjalanan — peta fase 30 hari dan navigasi pilihan hari | Primary | Memilih hari adalah tindakan utama tab. |
+| Perjalanan — fokus hari terpilih dan kebiasaan | Primary | Menampilkan catatan serta kebiasaan hari yang dipilih setelah peta. |
+| Perjalanan — Toples Bukti | Quiet | Koleksi pendukung setelah pemilihan hari dan kebiasaan. |
+| Aktivitas — judul dan empat subtabs Katalog, Media, Etalase Rak, Postur | Navigasi | Tidak ada hero bersama karena konten berubah menurut subtab. Ikon emoji dekoratif di label navigasi/kategori dihilangkan. |
+| Aktivitas — rekomendasi Katalog dan favorit | Primary | Rekomendasi serta koleksi pilihan adalah konten inti Katalog; filter berada di bawah sebagai Quiet. |
+| Aktivitas — pustaka Media dan form tambah tautan | Primary | Pustaka dan penambahan media adalah aksi langsung; kategori/filter mendukung eksplorasi. |
+| Aktivitas — Skin Diary hari ini dan Etalase produk | Primary | Status kulit tampil sebelum produk; weekly check dan foto progres turun menjadi Quiet. |
+| Aktivitas — reset postur dan video panduan | Primary | Aksi panduan berada sebelum statistik dan refleksi mingguan yang Quiet. |
+| Diary — Personal Diary Entry | Primary | Form hari terpilih dan autosave berada paling atas setelah heading konteks. |
+| Diary — ulasan mingguan dan surat Hari 30 | Primary | Form refleksi sekunder berada setelah entri harian; surat hanya muncul pada hari 30 seperti sebelumnya. |
+| Diary — toples, bacaan, lemari/lookbook | Quiet | Koleksi dan arsip pribadi berada setelah form yang sedang diedit. |
+| Diary — arsip lembar sebelumnya | Quiet | Riwayat lama menjadi bagian terakhir layar. |
+| Profil — Keepsakes | Hero + Quiet | Aura menjadi satu-satunya ringkasan utama; pencapaian dan hadiah menyusul sebagai koleksi. Aura tidak diulang pada subtab lain. |
+| Profil — Jadwal & KRS | Quiet + Primary | Agenda hari ini memberi konteks, lalu kalender dan editor jadwal menerima fokus aksi. |
+| Profil — Pengaturan | Primary + Quiet | Preferensi serta ekspor/impor adalah grup utama; reset dipisah di bagian akhir. |
+
+Judul konteks dan navigasi subtabs selalu tampil sebelum konten. Urutan data dan kontrol hanya diubah pada tab yang ditampilkan; seluruh handler lama tetap menjadi tujuan aksi. Dialog, sheet, dan toast mengikuti permukaan yang sama tanpa ornamen tambahan.
+
+Verifikasi Fase 3: `npm test` lulus (2 tes), `npm run build` berhasil (64 modul), `node --check public/legacy-app.js` dan `git diff --check` lulus. Pemeriksaan visual dan uji interaksi manual pada browser belum dilakukan. Fase 4 berikutnya berisi pembersihan kelas/aset lama, pemeriksaan responsif, uji fungsi manual, dan verifikasi akhir.

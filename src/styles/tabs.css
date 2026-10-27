@@ -1,0 +1,302 @@
+/* Shared hierarchy for Journey, Activity, Diary, and Profile tabs. */
+#main > .screen-heading {
+  order: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0 0 4px;
+}
+.screen-heading .eyebrow { display: block; margin: 0 0 4px; }
+.screen-heading h1 { margin: 0; color: var(--ink); font: 600 36px/1.05 var(--font-display); overflow-wrap: anywhere; }
+.screen-heading p { max-width: 64ch; margin: 6px 0 0; color: var(--muted); font: 400 15px/1.5 var(--font-body); }
+
+body[data-active-tab="journey"] #main .tier-primary,
+body[data-active-tab="act"] #main .tier-primary,
+body[data-active-tab="diary"] #main .tier-primary,
+body[data-active-tab="me"] #main .tier-primary,
+body[data-active-tab="act"] #main .activity-primary {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: none;
+}
+body[data-active-tab="journey"] #main .tier-quiet,
+body[data-active-tab="act"] #main .tier-quiet,
+body[data-active-tab="diary"] #main .tier-quiet,
+body[data-active-tab="me"] #main .tier-quiet {
+  min-width: 0;
+  padding: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  box-shadow: none;
+}
+
+body[data-active-tab="journey"] #main .card,
+body[data-active-tab="journey"] #main .card.paper,
+body[data-active-tab="journey"] #main .card.soft,
+body[data-active-tab="journey"] #main .coq-frame,
+body[data-active-tab="journey"] #main .wardrobe-box,
+body[data-active-tab="act"] #main .card,
+body[data-active-tab="act"] #main .card.paper,
+body[data-active-tab="act"] #main .card.soft,
+body[data-active-tab="act"] #main .coq-frame,
+body[data-active-tab="act"] #main .wardrobe-box,
+body[data-active-tab="diary"] #main .card,
+body[data-active-tab="diary"] #main .card.paper,
+body[data-active-tab="diary"] #main .card.soft,
+body[data-active-tab="diary"] #main .coq-frame,
+body[data-active-tab="diary"] #main .wardrobe-box,
+body[data-active-tab="me"] #main .card,
+body[data-active-tab="me"] #main .card.paper,
+body[data-active-tab="me"] #main .card.soft,
+body[data-active-tab="me"] #main .coq-frame,
+body[data-active-tab="me"] #main .wardrobe-box {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: none;
+}
+body[data-active-tab="journey"] #main .tier-quiet.card,
+body[data-active-tab="act"] #main .tier-quiet.card,
+body[data-active-tab="diary"] #main .tier-quiet.card,
+body[data-active-tab="me"] #main .tier-quiet.card {
+  border: 0;
+  border-top: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: transparent;
+}
+
+body[data-active-tab="journey"] #main .coq-frame,
+body[data-active-tab="journey"] #main .card::before,
+body[data-active-tab="act"] #main .coq-frame,
+body[data-active-tab="act"] #main .card::before,
+body[data-active-tab="diary"] #main .coq-frame,
+body[data-active-tab="diary"] #main .card::before,
+body[data-active-tab="me"] #main .coq-frame,
+body[data-active-tab="me"] #main .card::before { background-image: none; }
+body[data-active-tab="journey"] #main .coq-frame::before,
+body[data-active-tab="journey"] #main .coq-frame::after,
+body[data-active-tab="journey"] #main .card.paper::before,
+body[data-active-tab="act"] #main .coq-frame::before,
+body[data-active-tab="act"] #main .coq-frame::after,
+body[data-active-tab="act"] #main .card.paper::before,
+body[data-active-tab="diary"] #main .coq-frame::before,
+body[data-active-tab="diary"] #main .coq-frame::after,
+body[data-active-tab="diary"] #main .card.paper::before,
+body[data-active-tab="me"] #main .coq-frame::before,
+body[data-active-tab="me"] #main .coq-frame::after,
+body[data-active-tab="me"] #main .card.paper::before { display: none !important; }
+body[data-active-tab="journey"] #main .washi,
+body[data-active-tab="journey"] #main .lace-bar,
+body[data-active-tab="journey"] #main .scallop-oval,
+body[data-active-tab="journey"] #main .mirror-crown,
+body[data-active-tab="journey"] #main .wardrobe-svg,
+body[data-active-tab="act"] #main .washi,
+body[data-active-tab="act"] #main .lace-bar,
+body[data-active-tab="act"] #main .scallop-oval,
+body[data-active-tab="act"] #main .mirror-crown,
+body[data-active-tab="act"] #main .wardrobe-svg,
+body[data-active-tab="diary"] #main .washi,
+body[data-active-tab="diary"] #main .lace-bar,
+body[data-active-tab="diary"] #main .scallop-oval,
+body[data-active-tab="diary"] #main .mirror-crown,
+body[data-active-tab="diary"] #main .wardrobe-svg,
+body[data-active-tab="me"] #main .washi,
+body[data-active-tab="me"] #main .lace-bar,
+body[data-active-tab="me"] #main .scallop-oval,
+body[data-active-tab="me"] #main .mirror-crown,
+body[data-active-tab="me"] #main .wardrobe-svg { display: none !important; }
+body[data-active-tab="journey"] #main .boutique-hdr,
+body[data-active-tab="act"] #main .boutique-hdr,
+body[data-active-tab="diary"] #main .boutique-hdr,
+body[data-active-tab="me"] #main .boutique-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--line-strong);
+  background: transparent;
+}
+body[data-active-tab="journey"] #main .boutique-hdr-title,
+body[data-active-tab="act"] #main .boutique-hdr-title,
+body[data-active-tab="diary"] #main .boutique-hdr-title,
+body[data-active-tab="me"] #main .boutique-hdr-title { color: var(--ink); font: 600 21px/1.2 var(--font-display); letter-spacing: 0; }
+
+/* Journey: map and selected-day actions first; the proof jar stays quiet. */
+.journey-map { margin: 0; padding: 0; border: 0; }
+.journey-map::before { border-left: 1px solid var(--line-strong); }
+.journey-map .ms { margin: 0 0 12px; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: none; }
+.journey-map .ms:last-child { margin-bottom: 0; }
+.journey-map .ms h3 { margin: 5px 0; color: var(--ink); font: 600 22px/1.15 var(--font-display); }
+.journey-map .ms p { color: var(--muted); }
+.journey-map .dgrid { grid-template-columns: repeat(7, minmax(34px, 1fr)); gap: 6px; margin-top: 12px; }
+.journey-focus > .card { margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.journey-focus .day-nav { margin: 0 0 14px; }
+.journey-habits > .card,
+.journey-habits > details { margin: 0; padding: 12px 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }
+.journey-habits > .card::before { display: none; }
+.journey-habits summary { min-height: 48px; color: var(--ink); }
+.journey-activity-summary { padding-top: 10px; border-top: 1px solid var(--line); }
+.journey-keepsake { padding-top: 18px !important; }
+.journey-keepsake > .card { margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.journey-keepsake .jar-svg-wrap, .diary-jar .jar-svg-wrap { display: none; }
+
+/* Activity subtabs keep their own content and action order. */
+.activity-tabs { min-width: 0; }
+.activity-tabs .seg,
+.profile-tabs .seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0 0 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: transparent;
+}
+.activity-tabs .seg .chip,
+.profile-tabs .seg .chip {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--muted);
+  font: 500 13px/1.3 var(--font-body);
+}
+.activity-tabs .seg .chip.on,
+.profile-tabs .seg .chip.on { background: var(--accent); color: var(--bg); box-shadow: none; }
+.activity-content { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; }
+.activity-content > .tier-quiet { order: 10; }
+.activity-content .coq-frame.activity-primary { padding: 20px; }
+.activity-content .coq-inner { padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.activity-content .script { color: var(--ink); font: 600 28px/1.15 var(--font-display) !important; }
+.activity-content .sg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.activity-content .opt { min-width: 0; min-height: 48px; justify-content: flex-start; border: 1px solid var(--line); border-radius: 12px; background: transparent; color: var(--ink); text-align: left; }
+.activity-content .media-card-vis { min-width: 0; padding: 12px 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }
+.activity-content .media-card-vis:last-child { border-bottom: 0; }
+.activity-content .media-thumb { overflow: hidden; border-radius: 12px; box-shadow: none; }
+.activity-content .vanity-grid,
+.activity-content .lookbook-grid { gap: 10px; }
+.activity-content .mirror-card { min-width: 0; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: none; }
+.activity-content .mirror-card:hover { transform: none; }
+.activity-content .vanity-badge { max-width: 100%; border-radius: var(--r-pill); }
+.activity-content .mirror-well { margin: 0 auto 8px; }
+.activity-content .home-quiet-actions,
+.activity-content .row { flex-wrap: wrap; }
+.activity-content .activity-filters { padding: 16px 0; }
+.activity-content .activity-filters .boutique-hdr { margin-bottom: 8px; }
+.activity-content .spa-card { border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.activity-content .spa-tier { min-height: 56px; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; }
+.activity-content .spa-tier.on { background: transparent; color: var(--accent); }
+.activity-content .pd { width: 18px; height: 4px; border-radius: var(--r-pill); background: var(--line-strong); }
+.activity-content .pd.full { background: var(--accent); }
+
+/* Diary: today's entry and editable weekly reflections precede collections. */
+body[data-active-tab="diary"] #main > .diary-entry { order: 1; }
+body[data-active-tab="diary"] #main > .diary-weekly { order: 2; }
+body[data-active-tab="diary"] #main > .diary-final { order: 3; }
+body[data-active-tab="diary"] #main > .diary-jar,
+body[data-active-tab="diary"] #main > .diary-nook,
+body[data-active-tab="diary"] #main > .diary-wardrobe { order: 4; }
+body[data-active-tab="diary"] #main > .diary-archive { order: 5; }
+.diary-entry .day-nav { margin: 0 0 12px; }
+.diary-entry textarea { min-height: 110px; }
+.diary-jar, .diary-nook, .diary-wardrobe, .diary-archive { padding: 16px 0 !important; }
+.diary-jar > .jar-box { padding: 0; border: 0; background: transparent; box-shadow: none; }
+.diary-wardrobe { min-width: 0; }
+.diary-wardrobe .script { color: var(--ink); font: 600 26px/1.15 var(--font-display) !important; }
+.diary-wardrobe .lookbook-grid { gap: 10px; }
+.diary-wardrobe .mirror-card { min-width: 0; padding: 12px !important; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: none; }
+.diary-wardrobe .mirror-card:hover { transform: none; }
+.diary-wardrobe .ed-table { width: 100%; }
+.diary-archive .opt { min-height: 56px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; text-align: left; }
+
+/* Profile subtabs precede the selected content. Keepsakes owns the aura summary. */
+.profile-tabs { order: 1; min-width: 0; }
+body[data-active-tab="me"] #main > .profile-aura { order: 2; padding: 0; border: 0; background: transparent; }
+body[data-active-tab="me"] #main > .profile-keepsakes,
+body[data-active-tab="me"] #main > .profile-treats,
+body[data-active-tab="me"] #main > .profile-today,
+body[data-active-tab="me"] #main > .profile-schedule,
+body[data-active-tab="me"] #main > .profile-preferences,
+body[data-active-tab="me"] #main > .profile-backup,
+body[data-active-tab="me"] #main > .profile-reset { order: 3; }
+.profile-aura > .card { margin: 0; padding: 20px; border: 0; border-radius: var(--r-hero-d); background: var(--hero-bg); color: var(--hero-ink); box-shadow: var(--sh); }
+.profile-aura .boutique-hdr { border-color: rgba(250,247,245,.22); }
+.profile-aura .boutique-hdr-title,
+.profile-aura .aura-name,
+.profile-aura .aura-score { color: var(--hero-ink); }
+.profile-aura .aura-row { border-color: rgba(250,247,245,.18); }
+.profile-aura .aura-hearts { color: var(--accent-soft); }
+.profile-aura .aura-score { color: var(--hero-muted); }
+.profile-keepsakes, .profile-treats, .profile-reset { padding: 16px 0 !important; }
+.profile-keepsakes .ach-stamp { min-width: 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }
+.profile-keepsakes .ach-stamp.lock { opacity: .66; }
+.profile-treats .dn { gap: 12px; padding: 10px 0 !important; border-bottom: 1px solid var(--line) !important; }
+.profile-treats .dn > span { min-width: 0; }
+.profile-today { padding: 16px 0 !important; }
+.profile-today > .card { margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+.profile-schedule { display: flex; flex-direction: column; gap: var(--sp-4); padding: 0 !important; border: 0 !important; background: transparent !important; }
+.profile-schedule > .card { margin: 0; }
+.profile-schedule .wkgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.profile-schedule .wkd { min-width: 0; min-height: 56px; border: 1px solid var(--line); border-radius: 12px; background: transparent; box-shadow: none; }
+.profile-schedule .crow { flex-wrap: wrap; }
+.profile-preferences .row, .profile-backup .row { flex-wrap: wrap; }
+.profile-preferences .theme-toggle { min-width: 120px; }
+.profile-reset .btn { width: auto; }
+
+/* Dialogs and transient messages share the same quiet surface. */
+body[data-active-tab="journey"] dialog,
+body[data-active-tab="act"] dialog,
+body[data-active-tab="diary"] dialog,
+body[data-active-tab="me"] dialog {
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--sh-soft);
+}
+body[data-active-tab="journey"] #sheet,
+body[data-active-tab="act"] #sheet,
+body[data-active-tab="diary"] #sheet,
+body[data-active-tab="me"] #sheet { border-radius: var(--r-card) var(--r-card) 0 0; }
+body[data-active-tab="journey"] #toast,
+body[data-active-tab="act"] #toast,
+body[data-active-tab="diary"] #toast,
+body[data-active-tab="me"] #toast { border: 1px solid var(--line); box-shadow: none; }
+
+@media (min-width: 1024px) {
+  .screen-heading h1 { font-size: 44px; }
+  .journey-map .ms { padding: 18px; }
+  .activity-content .media-card-vis { grid-template-columns: 150px minmax(0, 1fr); }
+}
+
+@media (max-width: 700px) {
+  .screen-heading h1 { font-size: 36px; }
+  body[data-active-tab="journey"] #main .tier-primary,
+  body[data-active-tab="act"] #main .tier-primary,
+  body[data-active-tab="diary"] #main .tier-primary,
+  body[data-active-tab="me"] #main .tier-primary,
+  body[data-active-tab="act"] #main .activity-primary { padding: 16px; }
+  .activity-tabs .seg .chip, .profile-tabs .seg .chip { padding-inline: 8px; }
+  .journey-map .dgrid { grid-template-columns: repeat(5, minmax(34px, 1fr)); }
+  .activity-content .media-card-vis { grid-template-columns: 104px minmax(0, 1fr); }
+  .profile-schedule .wkgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 360px) {
+  .activity-content .media-card-vis { grid-template-columns: 1fr; }
+  .activity-content .media-thumb { aspect-ratio: 16 / 9; }
+}

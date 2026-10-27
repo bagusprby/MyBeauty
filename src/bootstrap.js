@@ -11,6 +11,7 @@ import "./styles/app.css";
 import "./styles/minimal.css";
 import "./styles/shell.css";
 import "./styles/home.css";
+import "./styles/tabs.css";
 
 window.__GLOW_ART = ART;
 let repo;

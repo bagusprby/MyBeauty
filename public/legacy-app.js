@@ -354,7 +354,7 @@ function renderNookMini() {
 }
 function renderNookCard() {
   const B = S.books, c = B.cur, st = bookStreak(), done = !!B.days[ymd()];
-  let h = `<div class="card paper">
+  let h = `<div class="card paper diary-nook tier-quiet">
     <div class="washi"></div>
     <div class="boutique-hdr"><span class="boutique-hdr-title">My Coquette Reading Nook</span></div>
     <div class="bk-top">${ART.book}<div>
@@ -1064,7 +1064,7 @@ function openJarSheet(shake = false) {
   `);
 }
 
-function renderJarCard() {
+function renderJarCard(extraClass = "") {
   const cnt = (S.jar || []).length;
   const latest = cnt ? S.jar[cnt - 1] : null;
   const petals = Math.min(14, cnt);
@@ -1074,7 +1074,7 @@ function renderJarCard() {
     const cy = 92 - Math.floor(i / 3) * 10 - (i % 2) * 3;
     petalCircles += `<ellipse cx="${cx}" cy="${cy}" rx="7.5" ry="4.5" transform="rotate(${(i * 35) % 180} ${cx} ${cy})" fill="${i % 2 ? "#cc8892" : "#eebbc3"}" opacity="0.9"/>`;
   }
-  return `<div class="card">
+  return `<div class="card ${extraClass}">
     <div class="jar-box">
       <div class="jar-svg-wrap" onclick="openJarSheet(true)" title="Ketuk untuk mengocok toples bukti kecil">
         <svg width="80" height="102" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
@@ -1454,15 +1454,12 @@ function vJourney() {
   const s0 = x => (S.rest[x] || S.low[x] || S.rescue[x]) ? "r" : prog(x).p >= 100 ? "full" : active(x) ? "part" : x < td ? "miss" : "fut";
   const actsDone = (S.acts[d] || []).filter(a => a && a.done);
 
-  let h = `<div class="coq-frame">
-    <div class="scallop-oval">
-      <span class="eyebrow">The 30-Day Chronicle</span>
-      <div class="script" style="font-size:2.3rem">My Glow Up Era</div>
-      <small class="mut">Setiap ritual, paket salon mandi, jurnal, dan istirahatmu tercatat di sini.</small>
-    </div>
-  </div>
-  ${renderJarCard()}
-  <div class="map">`;
+  let h = `<header class="screen-heading">
+    <span class="eyebrow">The 30-Day Chronicle · Hari ${d} · ${dateOf(d)}</span>
+    <h1>My Glow Up Era</h1>
+    <p>Setiap ritual, paket salon mandi, jurnal, dan istirahatmu tercatat di sini.</p>
+  </header>
+  <section class="journey-map tier-primary" aria-label="Peta perjalanan 30 hari"><div class="map">`;
 
   PHASES.forEach((p, i) => {
     let hit = 0, b = "";
@@ -1471,8 +1468,7 @@ function vJourney() {
       const s = s0(x);
       b += `<button class="dd ${s} ${x == td ? "today" : ""} ${x == d ? "sel" : ""}" onclick="setSel(${x})">${s == "full" ? ico("ck", 12) : s == "r" ? ico("rest", 11) : x}</button>`;
     }
-    h += `<div class="ms card">
-      <span class="nd">${ico(["spark", "skin", "body", "self"][i], 14)}</span>
+    h += `<div class="ms">
       <span class="eyebrow">Hari ${p[0]}–${p[1]} · ${hit}/${p[1] - p[0] + 1} Hari Hadir</span>
       <h3>${E(p[2])}</h3>
       <p class="mut" style="margin:0;font-size:0.83rem">${E(p[3])}</p>
@@ -1480,16 +1476,17 @@ function vJourney() {
     </div>`;
   });
 
-  return h + `</div>
-  <div class="card">
+  return h + `</div></section>
+  <section class="journey-focus tier-primary"><div class="card">
     ${dayNav()}
-    <div class="lace-bar"></div>
-    <span class="eyebrow" style="color:var(--rose-deep)">${E(phase(d)[2])}</span>
+    <span class="eyebrow">${E(phase(d)[2])}</span>
     <h3 style="margin-top:2px">Fokus Hari ${d}: “${E(F[d - 1])}”</h3>
     <p class="note">${E(NOTES[(d * 3) % NOTES.length])}</p>
-    ${REW[d] ? `<p class="note" style="border-left-color:var(--brown)">🎀 <b>Milestone Hari ${d}:</b> ${E(REW[d])}</p>` : ""}
-    ${actsDone.length ? `<p class="mut" style="font-size:0.84rem">✦ Aktivitas yang dinikmati: <b>${actsDone.map(a => E(a.a)).join(", ")}</b></p>` : ""}
-  </div>` + allList(d);
+    ${REW[d] ? `<p class="note"><b>Milestone Hari ${d}:</b> ${E(REW[d])}</p>` : ""}
+    ${actsDone.length ? `<p class="mut journey-activity-summary">Aktivitas yang dinikmati: <b>${actsDone.map(a => E(a.a)).join(", ")}</b></p>` : ""}
+  </div></section>
+  <section class="journey-habits tier-primary" aria-label="Kebiasaan hari terpilih">${allList(d)}</section>
+  <section class="journey-keepsake tier-quiet">${renderJarCard("journey-jar tier-quiet")}</section>`;
 }
 
 /* ===== Halaman 3: Aktivitas, Media, Rak Vanity, Postur ===== */
@@ -1736,13 +1733,13 @@ function vFx() {
   const favIds = Object.keys(fxS().fav).map(Number);
 
   if (fx.showFav) {
-    return `<div class="card paper">
+    return `<div class="card paper activity-primary">
       <div class="mh"><div><span class="eyebrow">Saved Collection</span><h3>Koleksi Favoritku (${favIds.length})</h3></div><button class="chip" onclick="fx.showFav=false;render()">← Kembali</button></div>
       ${favIds.length ? favIds.map((i, k) => fxCard(i, k % 3)).join("") : '<div class="empty">Belum ada favorit tersimpan.</div>'}
     </div>`;
   }
 
-  let h = `<div class="coq-frame">
+  let h = `<div class="coq-frame activity-primary">
     <div class="coq-inner">
       <div class="mh">
         <div>
@@ -1760,10 +1757,10 @@ function vFx() {
     </div>
   </div>`;
 
-  h += `<div class="card">
+  h += `<div class="card activity-filters tier-quiet">
     <div class="boutique-hdr"><span class="boutique-hdr-title">Vibe &amp; Category Filter</span></div>
     <div class="sg" style="margin-bottom:10px">
-      ${STN.map((s, i) => `<button class="opt" onclick="fxPreset(${i})"><span style="font-size:1.2rem">${s[2]}</span><span>${s[0]}</span></button>`).join("")}
+      ${STN.map((s, i) => `<button class="opt" onclick="fxPreset(${i})"><span>${s[0]}</span></button>`).join("")}
     </div>
     <div class="chips">
       <button class="chip ${fx.cat == 0 ? "on" : ""}" onclick="fx.cat=0;fxRoll(0)">Semua (50+)</button>
@@ -1779,7 +1776,7 @@ function vFx() {
 }
 
 /* ===== Sub-Tab Media Lounge ===== */
-const MEDIA_CATS = { all: "Semua", posture: "🎀 Olahraga Postur", podcast: "🎧 Podcast", glowup: "✨ Motivasi", subliminal: "🌙 Subliminal" };
+const MEDIA_CATS = { all: "Semua", posture: "Olahraga Postur", podcast: "Podcast", glowup: "Motivasi", subliminal: "Subliminal" };
 
 function openMediaPlay(id) {
   const m = (S.media || []).find(x => x.id === id); if (!m) return;
@@ -1819,7 +1816,7 @@ function delMedia(id) { S.media = (S.media || []).filter(m => m.id !== id); save
 
 function vMedia() {
   const list = (S.media || []).filter(m => mCat === "all" || m.cat === mCat);
-  return `<div class="card paper">
+  return `<div class="card paper activity-primary">
     <div class="washi"></div>
     <div class="boutique-hdr"><span class="boutique-hdr-title">Boutique Media Lounge</span></div>
     <p class="mut" style="margin:0 0 8px;font-size:0.84rem">Kurasi khusus instruktur wanita (Emi Wong, Mady Morrison, Move With Nicole), podcast reflektif, dan subliminal malam.</p>
@@ -1844,7 +1841,7 @@ function vMedia() {
       </div>`).join("")}
     </div>
   </div>
-  <div class="card">
+  <div class="card activity-primary">
     <div class="boutique-hdr"><span class="boutique-hdr-title">+ Simpan Link TikTok / YouTube / Spotify</span></div>
     <div class="crow">
       <input type="text" id="mTitle" placeholder="Judul video / podcast favoritmu" style="flex:1">
@@ -1953,7 +1950,16 @@ function vSkin() {
   if (tags.includes("Terasa nyeri") || tags.includes("Jerawat baru") || tags.includes("Masa hormonal")) advice = `Ada jerawat meradang/hormonal: jangan disentuh/dipencet. Oleskan ${heroMoist} ekstra dan pastikan sarung bantal bersih.`;
   else if (tags.includes("Kering") || tags.includes("Iritasi")) advice = `Skin barrier butuh istirahat: pagi cukup bilas air biasa, malam oles ${heroMoist}.`;
 
-  return `<div class="coq-frame">
+  const skinToday = `<div class="card tier-primary">
+    ${dayNav()}
+    <div class="boutique-hdr"><span class="boutique-hdr-title">Skin Diary · Hari ${d}</span><button class="chip ${S.periodMode ? "on" : ""}" onclick="togglePeriodMode()">🌸 ${S.periodMode ? "Mode PMS Aktif" : "Mode PMS"}</button></div>
+    <p class="note">🌸 <b>Saran untuk kulitmu hari ini:</b> ${E(advice)}</p>
+    <div class="chips">${TAGS.map(t => `<button class="chip ${s.tags.includes(t) ? "on" : ""}" onclick="tag('${t}')">${t}</button>`).join("")}</div>
+    <label class="q" for="sn">Catatan Kondisi Kulit &amp; Pemicu</label>
+    <textarea id="sn" placeholder="Misal: habis begadang scanlation, memakai soothing cream, kulit lebih kalem..." oninput="ci(sd,'note',this.value)">${E(s.note)}</textarea>
+  </div>`;
+
+  const vanity = `<div class="coq-frame tier-primary">
     <div class="coq-inner">
       <div class="boutique-hdr">
         <span class="boutique-hdr-title">My Vanity Shelf · Etalase Meja Rias</span>
@@ -1970,33 +1976,21 @@ function vSkin() {
         </div>`).join("")}
       </div>
     </div>
-  </div>
+  </div>`;
 
-  <div class="card">
-    ${dayNav()}
-    <div class="lace-bar"></div>
-    <div class="boutique-hdr">
-      <span class="boutique-hdr-title">Skin Diary · Hari ${d}</span>
-      <button class="chip ${S.periodMode ? "on" : ""}" onclick="togglePeriodMode()">🌸 ${S.periodMode ? "Mode PMS Aktif" : "Mode PMS"}</button>
-    </div>
-    <p class="note">🌸 <b>Saran untuk kulitmu hari ini:</b> ${E(advice)}</p>
-    <div class="chips">${TAGS.map(t => `<button class="chip ${s.tags.includes(t) ? "on" : ""}" onclick="tag('${t}')">${t}</button>`).join("")}</div>
-    <label class="q" for="sn">Catatan Kondisi Kulit &amp; Pemicu</label>
-    <textarea id="sn" placeholder="Misal: habis begadang scanlation, memakai soothing cream, kulit lebih kalem..." oninput="ci(sd,'note',this.value)">${E(s.note)}</textarea>
-  </div>
-
-  <div class="card">
+  const weekly = `<div class="card tier-quiet">
     <div class="boutique-hdr"><span class="boutique-hdr-title">Weekly Skin Check · Minggu ${w}</span></div>
     <div class="chips">${o.map(x => `<button class="chip ${wr.skin === x ? "on" : ""}" onclick="wset(${w},'skin','${x}',1)">${x}</button>`).join("")}</div>
     <textarea placeholder="Pola kulit yang kusadari minggu ini..." oninput="wset(${w},'skinNote',this.value)">${E(wr.skinNote)}</textarea>
-  </div>
+  </div>`;
 
-  <div class="card">
+  const gallery = `<div class="card tier-quiet">
     <div class="boutique-hdr"><span class="boutique-hdr-title">Private Progress Gallery 📷</span></div>
     <input type="file" accept="image/*" id="ph" hidden onchange="addPhoto(this)">
     <button class="btn-ed" onclick="$('#ph').click()"><span>+ Simpan Foto Kulit / Mirror Check Hari ${d}</span><span class="arr">→</span></button>
     ${S.photos.length ? `<div class="ph" style="margin-top:10px">${S.photos.map((p, i) => `<div><img src="${window.__photoUrl?.(p.src) || p.src}" alt="Hari ${p.d}"><div class="dn"><small>Hari ${p.d}</small><button class="lk" onclick="ask('Hapus foto?','Foto akan dihapus dari akun dan penyimpananmu.','Hapus',async()=>{try{await window.__deleteGlowImage?.(S.photos[${i}].src);S.photos.splice(${i},1);save();render()}catch(e){toast('Foto belum dapat dihapus. Coba lagi.')}})">Hapus</button></div></div>`).join("")}</div>` : '<div class="empty">Belum ada foto progres. Foto disimpan privat di akunmu.</div>'}
   </div>`;
+  return skinToday + vanity + weekly + gallery;
 }
 
 function addPhoto(el) {
@@ -2031,30 +2025,7 @@ function vBody() {
   for (let i = Math.max(1, todayN() - 6); i <= todayN(); i++) dots += `<span class="pd ${ok(S.done[i]) ? "full" : ""}" title="Hari ${i}"></span>`;
   const postVids = (S.media || []).filter(m => m.cat === "posture");
 
-  return `<div class="card paper">
-    <div class="washi"></div>
-    <div class="boutique-hdr"><span class="boutique-hdr-title">Graceful Poise &amp; Posture</span></div>
-    <p style="margin:4px 0">7 hari terakhir: ${dots}</p>
-    <p class="mut" style="margin:0;font-size:0.83rem">${Object.keys(S.done).filter(k => ok(S.done[k])).length} hari dengan jeda postur atau peregangan bahu.</p>
-  </div>
-  <div class="card">
-    <div class="boutique-hdr"><span class="boutique-hdr-title">Guided Videos · Instruktur Wanita</span></div>
-    <div class="media-grid">
-      ${postVids.map(m => `<div class="media-card-vis">
-        <div class="media-thumb" onclick="openMediaPlay('${m.id}')">
-          <img src="${E(m.thumb)}" alt="${E(m.title)}">
-          <div class="play-pill">▶</div>
-          <span class="dur-tag">${E(m.dur)}</span>
-        </div>
-        <div>
-          <b style="font-family:'Cormorant Garamond',serif;font-size:1.12rem;display:block">${E(m.title)}</b>
-          <small class="mut" style="display:block;margin-bottom:6px">${E(m.creator)}</small>
-          <a class="chip on" href="${E(m.url)}" target="_blank" rel="noopener noreferrer" style="padding:3px 10px;font-size:0.74rem">↗ Tonton Panduan</a>
-        </div>
-      </div>`).join("")}
-    </div>
-  </div>
-  <div class="card">
+  const exercise = `<div class="card tier-primary">
     <div class="boutique-hdr"><span class="boutique-hdr-title">1–5 Minute Desk &amp; Class Reset</span></div>
     <ul style="padding-left:18px;margin:6px 0;line-height:1.6">
       <li><b>Chin Tucks:</b> tarik dagu lurus ke belakang perlahan 5 kali.</li>
@@ -2062,22 +2033,35 @@ function vBody() {
       <li><b>Doorway Chest Opener:</b> lengan di kusen pintu, condongkan dada 20 detik.</li>
       <li><b>30-Second Wall Poise:</b> berdiri tegak bersandar di dinding selama 30 detik.</li>
     </ul>
-    <button class="btn-ed" onclick="toggle('post1', ${todayN()})">
-      <span>${(S.done[todayN()] || {}).post1 ? "✓ Postur 1 Menit Hari Ini Selesai" : "Tandai Selesai: Reset Postur 1 Menit"}</span>
-      <span class="arr">→</span>
-    </button>
-  </div>
-  <div class="card">
+    <button class="btn-ed" onclick="toggle('post1', ${todayN()})"><span>${(S.done[todayN()] || {}).post1 ? "✓ Postur 1 Menit Hari Ini Selesai" : "Tandai Selesai: Reset Postur 1 Menit"}</span><span class="arr">→</span></button>
+  </div>`;
+  const videos = `<div class="card tier-primary">
+    <div class="boutique-hdr"><span class="boutique-hdr-title">Guided Videos · Instruktur Wanita</span></div>
+    <div class="media-grid">${postVids.map(m => `<div class="media-card-vis">
+      <div class="media-thumb" onclick="openMediaPlay('${m.id}')"><img src="${E(m.thumb)}" alt="${E(m.title)}"><div class="play-pill">▶</div><span class="dur-tag">${E(m.dur)}</span></div>
+      <div><b style="font-family:'Cormorant Garamond',serif;font-size:1.12rem;display:block">${E(m.title)}</b><small class="mut" style="display:block;margin-bottom:6px">${E(m.creator)}</small><a class="chip on" href="${E(m.url)}" target="_blank" rel="noopener noreferrer" style="padding:3px 10px;font-size:0.74rem">↗ Tonton Panduan</a></div>
+    </div>`).join("")}</div>
+  </div>`;
+  const progress = `<div class="card tier-quiet">
+    <div class="boutique-hdr"><span class="boutique-hdr-title">Graceful Poise &amp; Posture</span></div>
+    <p style="margin:4px 0">7 hari terakhir: ${dots}</p>
+    <p class="mut" style="margin:0;font-size:0.83rem">${Object.keys(S.done).filter(k => ok(S.done[k])).length} hari dengan jeda postur atau peregangan bahu.</p>
+  </div>`;
+  const weekly = `<div class="card tier-quiet">
     <div class="boutique-hdr"><span class="boutique-hdr-title">Refleksi Tubuh · Minggu ${w}</span></div>
     <div class="chips">${cs.map(x => `<button class="chip ${wr.body === x ? "on" : ""}" onclick="wset(${w},'body','${x}',1)">${x}</button>`).join("")}</div>
     <textarea placeholder="Catatan kenyamanan leher & punggung minggu ini..." oninput="wset(${w},'bodyNote',this.value)">${E(wr.bodyNote)}</textarea>
   </div>`;
+  return exercise + videos + progress + weekly;
 }
 
 const SEG = (arr, cur, v) => `<div class="seg">${arr.map(a => `<button class="chip ${cur == a[0] ? "on" : ""}" onclick="${v}='${a[0]}';render()">${a[1]}</button>`).join("")}</div>`;
 function vAct() {
   if (!["fx", "md", "sk", "po"].includes(sA)) sA = "fx";
-  return SEG([["fx", "✨ Katalog"], ["md", "🎧 Media"], ["sk", "🌸 Etalase Rak"], ["po", "🎀 Postur"]], sA, "sA") + ({ fx: vFx, md: vMedia, sk: vSkin, po: vBody }[sA])();
+  const labels = { fx: "Katalog", md: "Media", sk: "Etalase Rak", po: "Postur" };
+  return `<header class="screen-heading"><span class="eyebrow">Aktivitas · ${labels[sA]}</span><h1>Aktivitas</h1></header>
+    <nav class="activity-tabs" aria-label="Kategori aktivitas">${SEG([["fx", "Katalog"], ["md", "Media"], ["sk", "Etalase Rak"], ["po", "Postur"]], sA, "sA")}</nav>
+    <div class="activity-content" data-activity-view="${sA}">${({ fx: vFx, md: vMedia, sk: vSkin, po: vBody }[sA])()}</div>`;
 }
 
 /* ===== Halaman 4: Diary Lengkap + Open Wardrobe + 3 Custom OOTD Mirror Slots ===== */
@@ -2154,11 +2138,9 @@ function vJournal() {
   const lookIcons = [ART.camisole, ART.dressform, ART.shoe];
   const row = (k, a, em) => `<div class="chips">${a.map((x, i) => `<button class="chip ${j[k] === i ? "on" : ""}" onclick="setCi(${d},'${k}',${i})">${em ? em[i] + " " : ""}${x}</button>`).join("")}</div>`;
 
-  let h = `<div class="card paper">
-    <div class="washi"></div>
+  let h = `<header class="screen-heading"><span class="eyebrow">Diary · Hari ${d} · ${dateOf(d)}</span><h1>Personal Diary Entry</h1></header>
+  <div class="card paper diary-entry tier-primary">
     ${dayNav()}
-    <div class="lace-bar"></div>
-    <div class="boutique-hdr"><span class="boutique-hdr-title">Personal Diary Entry</span></div>
     <div class="sv" id="sv" aria-live="polite"></div>
     <label class="q">Suasana Hatiku (Hari ${d})</label>
     ${row("mood", MOOD, ME)}
@@ -2175,11 +2157,11 @@ function vJournal() {
     </details>
   </div>
 
-  ${renderJarCard()}
+  ${renderJarCard("diary-jar tier-quiet")}
 
   ${renderNookCard()}
 
-  <div class="wardrobe-box">
+  <div class="wardrobe-box diary-wardrobe tier-quiet">
     <span class="eyebrow">My Open Wardrobe &amp; Beauty Dossier</span>
     <h3 class="script" style="font-size:2rem;margin:2px 0">Lemari &amp; Lookbook Pesonaku</h3>
     <svg class="wardrobe-svg" viewBox="0 0 420 155" xmlns="http://www.w3.org/2000/svg">
@@ -2221,7 +2203,7 @@ function vJournal() {
     </table>
   </div>
 
-  <details class="card">
+  <details class="card diary-weekly tier-primary">
     <summary><span class="serif" style="font-size:1.18rem">Ulasan Mingguan · Minggu ${w}</span> <small>Hari ${w == 4 ? "22–30" : (w * 7 - 6) + "–" + (w * 7)}</small></summary>
     <label class="q" for="w1">Apa yang terasa paling nyaman dan realistis minggu ini?</label>
     <textarea id="w1" oninput="wset(${w},'ok',this.value)">${E(wr.ok)}</textarea>
@@ -2233,7 +2215,7 @@ function vJournal() {
 
   if (d == 30) {
     const f = wk("final");
-    h += `<div class="card soft">
+    h += `<div class="card soft diary-final tier-primary">
       <h3>Surat untuk Diriku di Hari ke-30 🎀</h3>
       <label class="q" for="f1">Perubahan kecil apa yang paling kurasakan dibanding Hari 1?</label>
       <textarea id="f1" oninput="wset('final','a',this.value)">${E(f.a)}</textarea>
@@ -2249,7 +2231,7 @@ function vJournal() {
     return x && (x.mood != null || x.text || x.well || x.tom);
   }).sort((a, b) => b - a);
 
-  return h + `<div class="card">
+  return h + `<div class="card diary-archive tier-quiet">
     <div class="boutique-hdr"><span class="boutique-hdr-title">Arsip Lembar Sebelumnya</span></div>
     ${hs.length ? hs.map(k => {
       const x = S.j[k];
@@ -2425,10 +2407,14 @@ function setStart(v) {
 }
 
 function vMe() {
-  let h = renderAuraCard(false) + SEG([["kol", "🎀 Keepsakes"], ["jd", "🗓️ Jadwal & KRS"], ["pg", "⚙️ Pengaturan"]], sP, "sP");
+  if (!["kol", "jd", "pg"].includes(sP)) sP = "kol";
+  const labels = { kol: "Keepsakes", jd: "Jadwal & KRS", pg: "Pengaturan" };
+  let h = `<header class="screen-heading"><span class="eyebrow">${labels[sP]} · Hari ${todayN()} · ${dateOf(todayN())}</span><h1>Profil</h1></header>
+    <nav class="profile-tabs" aria-label="Bagian profil">${SEG([["kol", "Keepsakes"], ["jd", "Jadwal & KRS"], ["pg", "Pengaturan"]], sP, "sP")}</nav>`;
   if (sP == "kol") {
     const all = ACH.map(a => [a[0], a[1], a[2], a[4]]).concat(PHASES.map((p, i) => ["m" + i, p[2], "Hadir di " + (i == 3 ? 5 : 4) + " hari atau lebih pada bab ini.", "map"]));
-    h += `<div class="card">
+    h += `<section class="profile-aura tier-hero">${renderAuraCard(false)}</section>
+    <div class="card profile-keepsakes tier-quiet">
       <div class="boutique-hdr"><span class="boutique-hdr-title">Stamp &amp; Ribbon Keepsakes</span></div>
       <div class="stamp-grid">
         ${all.map(a => {
@@ -2444,14 +2430,14 @@ function vMe() {
         }).join("")}
       </div>
     </div>
-    <div class="card">
+    <div class="card profile-treats tier-quiet">
       <div class="boutique-hdr"><span class="boutique-hdr-title">Self-Kindness Treats</span></div>
       ${GIFTS.map((g, i) => `<div class="dn" style="padding:6px 0;border-bottom:1px dashed var(--line)"><span>${E(g)}</span><button class="chip ${S.gifts[i] ? "on" : ""}" onclick="claim(${i})">${S.gifts[i] ? "Dinikmati ✓" : "Ambil"}</button></div>`).join("")}
     </div>`;
   } else if (sP == "jd") {
-    h += planCard(todayN()) + vJadwal();
+    h += `<section class="profile-today tier-quiet">${planCard(todayN())}</section><section class="profile-schedule tier-primary">${vJadwal()}</section>`;
   } else {
-    h += `<div class="card">
+    h += `<div class="card profile-preferences tier-primary">
       <div class="boutique-hdr"><span class="boutique-hdr-title">Editorial Preferences</span></div>
       <div class="row" style="margin:8px 0">
         <button class="btn ghost theme-toggle" id="themeBtn" type="button" onclick="toggleTheme()" aria-label="Ganti mode terang atau gelap">
@@ -2463,7 +2449,7 @@ function vMe() {
       <label class="q" for="sd0">Tanggal Mulai Hari ke-1</label>
       <input type="date" id="sd0" value="${new Date(S.start).toLocaleDateString("sv-SE")}" onchange="setStart(this.value)">
     </div>
-    <div class="card">
+    <div class="card profile-backup tier-primary">
       <div class="boutique-hdr"><span class="boutique-hdr-title">My Archive Key · Cadangkan &amp; Pindah Perangkat</span></div>
       <p class="mut" style="margin:0 0 8px;font-size:0.83rem">Simpan seluruh jurnal, progres, isi Etalase Rak, dan fotomu ke dalam file cadangan agar aman di Safari iPhone maupun laptop.</p>
       <div class="row">
@@ -2471,7 +2457,7 @@ function vMe() {
         <button class="btn ghost" onclick="$('#restoreIn').click()">⬆ Pulihkan dari File Arsip</button>
       </div>
     </div>
-    <div class="card">
+    <div class="card profile-reset tier-quiet">
       <div class="boutique-hdr"><span class="boutique-hdr-title">Reset Perjalanan</span></div>
       <button class="btn ghost big" onclick="resetAll()">Atur Ulang Seluruh Data</button>
     </div>`;
@@ -2499,32 +2485,9 @@ function toggleTheme() {
 function go(t) { tab = t; if (t == "today" || t == "diary" || (t == "journey" && sel < 1)) sel = todayN(); render(); scrollTo(0, 0); }
 
 function applyCardHierarchy(view) {
-  if (view === "today") return;
-  const root = $("#main"), nodes = [...root.children];
-  if (!nodes.length) return;
-  let hero = nodes.find(el => el.matches(".boutique-wall,.coq-frame,.card,.whisper,.nx,.notebook-card")) || nodes[0];
-  hero.classList.add("tier-hero");
-  const statuses = nodes.filter(el => el.matches(".cycle-banner,.rescue-banner"));
-  if (view === "today") {
-    const primary = nodes.filter(el => el.matches(".card") && /Daily Mood|The Daily Edit/.test(el.textContent));
-    const checkin = nodes.find(el => el.matches(".sumr"));
-    if (checkin) primary.push(checkin);
-    primary.sort((a, b) => nodes.indexOf(a) - nodes.indexOf(b));
-    let anchor = hero.nextSibling;
-    for (const status of statuses) root.insertBefore(status, anchor);
-    anchor = statuses.at(-1)?.nextSibling || hero.nextSibling;
-    for (const item of primary) { item.classList.add("tier-primary"); root.insertBefore(item, anchor); anchor = item.nextSibling; }
-    const ordered = [...root.children];
-    for (const el of ordered) if (el !== hero && !statuses.includes(el) && !primary.includes(el)) el.classList.add("tier-quiet");
-  } else {
-    let count = 0;
-    for (const el of nodes) {
-      if (el === hero || statuses.includes(el)) continue;
-      if (count++ < 2) el.classList.add("tier-primary"); else el.classList.add("tier-quiet");
-    }
-    let anchor = hero.nextSibling;
-    for (const status of statuses) root.insertBefore(status, anchor);
-  }
+  // Each redesigned tab now marks its own semantic tiers in its template.
+  // Avoid inferring a hero from the first legacy card in DOM order.
+  return;
 }
 
 function render() {
@@ -2534,6 +2497,7 @@ function render() {
   document.body.dataset.activeTab = tab;
   $("#nav").innerHTML = `<div class="sidebar-brand">Glow Up Era</div>${TABS2.map(([key, label]) => `<button class="${tab == key ? "on" : ""}" onclick="go('${key}')" aria-label="${label}" aria-current="${tab == key ? "page" : "false"}">${label}</button>`).join("")}`;
   $("#main").innerHTML = { today: vToday, journey: vJourney, act: vAct, diary: vJournal, me: vMe }[tab]();
+  document.body.dataset.activeSubtab = tab === "act" ? sA : tab === "me" ? sP : "";
   syncThemeUI();
   applyCardHierarchy(tab);
   const rail = $("#quiet-rail"); if (rail) rail.innerHTML = `<h2 class="eyebrow rail-title">Ringkasan</h2>${tab === "today" ? vTodayQuiet() : (window.__glowApp?.getQuietHTML?.() || "")}`;
