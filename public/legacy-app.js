@@ -1335,6 +1335,9 @@ function vTodayQuiet() {
         <div class="home-quiet-actions"><button type="button" class="home-text-action" onclick="ciOpen=false;fx.sig=null;render()">Simpan &amp; Sesuaikan</button><button type="button" class="home-text-action" onclick="cd(${d}).skip=1;ciOpen=false;save();render()">Lewati</button></div>`
         : `<button class="home-checkin-summary" type="button" onclick="ciOpen=true;render()"><span>${c.mood != null ? `Mood: ${MOOD[c.mood]}` : "Check-in harian"}${c.energy != null ? ` · Energi: ${EN[c.energy]}` : ""}</span><span>Ubah</span></button>`}
     </section>
+    <details class="home-more-details">
+      <summary>Lihat ringkasan &amp; pintasan</summary>
+      <div class="home-more-content">
     ${skTags.length ? `<section class="home-quiet-block home-skin-note"><span class="eyebrow">Kulit Hari Ini · ${E(skTags.slice(0, 2).join(", "))}</span><p>Oleskan ${E(getVanityByRole("moist", "Centella soothing cream"))} dan biarkan tenang tanpa disentuh.</p></section>` : ""}
     <section class="home-quiet-block home-fact">${renderWhisperCard().replace("↻ Fakta Lain", "Fakta Lain").replace(/>\s*([^<]*[\p{Extended_Pictographic}][^<]*)</gu, (_, value) => `>${homeText(value)}<`)}</section>
     <section class="home-quiet-block home-links">
@@ -1360,6 +1363,8 @@ function vTodayQuiet() {
       ${S.lowMode ? `<button type="button" class="home-text-action" onclick="winLow()">${S.low[d] ? "Hari minimal menang" : "Hitung menang"}</button>` : ""}
       <button type="button" class="home-text-action" onclick="allOpen=!allOpen;render()">${allOpen ? "Sembunyikan arsip" : `Lihat semua kebiasaan (${hab(d).length})`}</button>
     </div></section>
+      </div>
+    </details>
   </div>`;
   return h;
 }
@@ -1371,8 +1376,8 @@ function vToday() {
     ? (window.__photoUrl?.(m.custom) || m.custom)
     : (MUSE_PRESETS[(m.preset || 0) % MUSE_PRESETS.length]?.img || "");
   const why = S.periodMode
-    ? "Mode Tamu Bulanan / PMS aktif—hanya langkah paling lembut & menenangkan yang ditampilkan."
-    : p.q.low ? "Mode ringan aktif—cukup langkah terkecil hari ini." : p.q.bonus ? "Energimu baik, ada 1 ritual bonus opsional." : "Tiga ritual inti yang lembut hari ini.";
+    ? "Mode PMS · pilih ritual yang terasa nyaman."
+    : p.q.low ? "Mode ringan · cukup lakukan yang kamu mampu." : p.q.bonus ? "3 ritual inti · 1 bonus opsional." : "3 ritual inti untuk hari ini.";
   const progress = Math.round((d / 30) * 100);
   return `<section class="home-hero" aria-labelledby="home-hero-title">
     <button class="home-hero-photo" type="button" onclick="openMuseSheet()" aria-label="Ganti foto Muse">
@@ -1469,7 +1474,6 @@ function vJourney() {
   let h = `<header class="screen-heading">
     <span class="eyebrow">The 30-Day Chronicle · Hari ${d} · ${dateOf(d)}</span>
     <h1>My Glow Up Era</h1>
-    <p>Setiap ritual, paket salon mandi, jurnal, dan istirahatmu tercatat di sini.</p>
   </header>
   <section class="journey-week-card tier-primary" aria-label="Hari dalam minggu ${week}">
     <span class="eyebrow">MINGGU ${week} · ${E(phase(d)[2].replace(/^Chapter [IVX]+ · /, ""))}</span>
@@ -1478,11 +1482,15 @@ function vJourney() {
   </section>
   <section class="journey-focus tier-quiet">
     ${dayNav()}
-    <span class="eyebrow">Fokus Hari ${d}:</span>
+    <span class="eyebrow">FOKUS HARI ${d}</span>
     <h2>“${E(F[d - 1])}”</h2>
-    <p class="note">${E(NOTES[(d * 3) % NOTES.length])}</p>
-    ${REW[d] ? `<p class="note"><b>Milestone Hari ${d}:</b> ${E(REW[d])}</p>` : ""}
+    <details class="journey-note-disclosure">
+      <summary>Catatan &amp; milestone hari ini</summary>
+      <p class="note">${E(NOTES[(d * 3) % NOTES.length])}</p>
+      ${REW[d] ? `<p class="note"><b>Milestone Hari ${d}:</b> ${E(REW[d])}</p>` : ""}
+    </details>
     ${actsDone.length ? `<p class="mut journey-activity-summary">Aktivitas yang dinikmati: <b>${actsDone.map(a => E(a.a)).join(", ")}</b></p>` : ""}
+    <button class="btn journey-focus-cta" type="button" onclick="document.querySelector('.journey-habits')?.scrollIntoView({behavior:'smooth',block:'start'})">Lihat checklist</button>
   </section>
   <section class="journey-chapters tier-quiet" aria-label="Empat chapter perjalanan">
     <span class="eyebrow">30 HARI · 4 CHAPTER</span>
@@ -1507,7 +1515,10 @@ function vJourney() {
   });
 
   return h + `</div></details>
-  <section class="journey-habits tier-primary" aria-label="Kebiasaan hari terpilih">${allList(d)}</section>
+  <section class="journey-habits tier-primary" aria-label="Kebiasaan hari terpilih">
+    <header class="journey-habits-header"><div><span class="eyebrow">CHECKLIST HARI ${d}</span><h2>Kebiasaan</h2></div><span class="journey-habits-count">${prog(d).n}/${prog(d).t}</span></header>
+    ${allList(d)}
+  </section>
   <section class="journey-keepsake tier-quiet">${renderJarCard("journey-jar tier-quiet")}</section>`;
 }
 

@@ -185,3 +185,9 @@ Verifikasi Fase 4: `npm test` lulus (2 tes), `npm run build` berhasil (65 modul)
 - Navbar desktop menjadi rail vertikal dengan ikon, label, brand, permukaan lembut, serta item aktif yang jelas. Markup mempertahankan `go()` dan `aria-current` yang sudah ada.
 - Tombol menerima hover lift untuk pointer, pressed state untuk sentuhan, focus-visible, serta dukungan reduced motion. Tidak ada handler atau logika data yang diubah.
 - Verifikasi: `npm test` lulus (2 tes), `npm run build` berhasil (66 modul), `node --check public/legacy-app.js` dan `git diff --check` lulus. Pemeriksaan visual browser belum dilakukan pada fase ini.
+
+## Fase 7 — fokus teks dan CTA
+
+- Beranda mempertahankan hero, CTA ritual, checklist, dan check-in sebagai fokus awal. Ringkasan, pintasan, fakta, jadwal, serta koleksi sekunder kini berada di disclosure “Lihat ringkasan & pintasan” agar halaman awal lebih mudah dipindai.
+- Keterangan mode pada ritual dipersingkat. Di Perjalanan, deskripsi header dihapus; catatan dan milestone dipindahkan ke disclosure, dan tersedia CTA “Lihat checklist”.
+- Checklist Perjalanan kini memiliki judul ringkas dan hitungan progres. Tidak ada rumus progres atau handler data yang diubah.

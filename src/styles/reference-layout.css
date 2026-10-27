@@ -64,6 +64,24 @@ body[data-active-tab="journey"] #main > .journey-week-card { padding: 16px; }
 .journey-all-days .ms p { margin: 0; color: var(--muted); }
 .journey-all-days .dgrid { grid-template-columns: repeat(7, minmax(34px, 1fr)); gap: 6px; }
 .journey-focus .note { padding: 0; border: 0; border-radius: 0; background: transparent; }
+.journey-note-disclosure {
+  margin: 10px 0 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.journey-note-disclosure > summary {
+  min-height: 44px;
+  padding: 11px 0;
+  color: var(--muted);
+  font: 500 13px/1.4 var(--font-body);
+  cursor: pointer;
+}
+.journey-note-disclosure .note { margin: 0 0 10px; line-height: 1.5; }
+.journey-note-disclosure .note + .note { margin-top: 8px; }
+.journey-focus-cta { margin-top: 16px; min-height: 48px; padding-inline: 20px; }
+.journey-habits-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.journey-habits-header h2 { margin: 3px 0 0; color: var(--ink); font: 600 23px/1.15 var(--font-display); }
+.journey-habits-count { flex: none; color: var(--muted); font: 500 13px/1.3 var(--font-body); font-variant-numeric: tabular-nums; }
 .journey-habits > details.card { padding: 10px 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }
 .journey-habits > details.card:last-child { border-bottom: 0; }
 
@@ -184,6 +202,8 @@ body[data-active-tab="me"] #main .profile-schedule > .card { margin: 0; }
   .journey-focus .day-nav > button:last-child { justify-self: end; }
   .journey-focus .day-nav > b { text-align: center; }
   .journey-focus > .eyebrow { display: block; margin-bottom: 4px; line-height: 1.5; }
+  .journey-focus-cta { width: 100%; }
+  .journey-habits-header { margin-bottom: 12px; }
   .journey-focus h2,
   .journey-chapters h2 { margin-block: 8px 12px; }
   .journey-focus .note { margin-bottom: 12px; line-height: 1.55; }
