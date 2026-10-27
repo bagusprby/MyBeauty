@@ -159,3 +159,15 @@ Verifikasi Fase 3: `npm test` lulus (2 tes), `npm run build` berhasil (64 modul)
 - Permukaan bertingkat dirapikan dengan menghapus bingkai bersarang pada peta perjalanan dan slot Lookbook; panel utama tetap satu permukaan dan bagian Quiet memakai pemisah saja.
 - Toples Bukti memakai lebar penuh pada Perjalanan/Diary. Penyebab tampilan desktop yang sempit adalah grid lama tetap menempatkan teks di kolom pertama 88 px setelah ilustrasi toples disembunyikan.
 - Sidebar desktop kini `position: fixed` dengan ruang kolom shell tetap disediakan; navigasi mobile juga tetap fixed di bawah layar.
+
+## Fase 4 — implementasi referensi redesain
+
+PDF `My Glow Up Era — Redesain Minimalis full` dipakai sebagai acuan visual untuk komposisi, bukan sebagai sumber data contoh. Beranda yang sudah disusun di Fase 2 telah mengikuti dua artboard Beranda (mobile dan desktop), sehingga tidak diubah pada fase ini.
+
+- Perjalanan menampilkan strip hari pada minggu terpilih, fokus dan chapter sebagai baris polos, serta checklist tetap dalam permukaan aksi. Peta lengkap 30 hari tersedia lewat disclosure agar pemilihan hari lama tetap bisa dilakukan.
+- Katalog Aktivitas menampilkan rekomendasi sebagai baris polos; detail pilihan dan kontrol penyegaran/filter mendapat permukaan tersendiri. Perilaku pilih, mulai, selesai, simpan favorit, dan ganti aktivitas tetap memakai handler yang sama.
+- Diary memisahkan ringkasan buku dari kontrol baca. Jurnal dan input/progress baca mendapat kartu; koleksi buku, lemari, dan arsip tampil tenang dengan pemisah.
+- Profil mengubah statistik Aura menjadi baris dengan bar progres. Pengaturan dan cadangan tetap menjadi permukaan aksi.
+- Token warna terang yang sudah ada sama dengan palet referensi (krem, tinta arang, aksen rose); token dark mode tetap berjalan. Font dan isi/data contoh tidak disalin dari artboard.
+
+Verifikasi Fase 4: `npm test` lulus (2 tes), `npm run build` berhasil (65 modul), `node --check public/legacy-app.js` lulus, dan `git diff --check` lulus. Browser lokal diperiksa pada mode gelap dengan viewport desktop sekitar 920 × 743 px; tampilan Perjalanan, Aktivitas, Diary, dan Profil terlihat. Mode terang dan breakpoint mobile belum diperiksa secara visual.

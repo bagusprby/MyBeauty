@@ -12,6 +12,7 @@ import "./styles/minimal.css";
 import "./styles/shell.css";
 import "./styles/home.css";
 import "./styles/tabs.css";
+import "./styles/reference-layout.css";
 
 window.__GLOW_ART = ART;
 let repo;

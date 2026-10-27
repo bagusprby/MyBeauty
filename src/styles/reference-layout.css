@@ -1,0 +1,159 @@
+/* Reference-led surfaces: input groups get a card; reading content stays quiet. */
+:root { --r-card: 16px; }
+
+body[data-active-tab="journey"] #main > .journey-week-card,
+body[data-active-tab="journey"] #main > .journey-habits,
+body[data-active-tab="act"] #main > .activity-content .activity-filters,
+body[data-active-tab="act"] #main > .activity-content .activity-controls-card,
+body[data-active-tab="diary"] #main > .diary-entry,
+body[data-active-tab="diary"] #main > .diary-reading-controls,
+body[data-active-tab="diary"] #main > .diary-reading-add,
+body[data-active-tab="me"] #main .profile-preferences,
+body[data-active-tab="me"] #main .profile-backup,
+body[data-active-tab="me"] #main .profile-schedule > .card {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: none;
+}
+
+/* Journey: a compact current-week strip leads into plain focus and chapter rows. */
+body[data-active-tab="journey"] #main > .journey-week-card { padding: 16px; }
+.journey-week-card > .eyebrow { display: block; margin-bottom: 12px; }
+.journey-week-card .dgrid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin: 0; }
+.journey-week-card .dd {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  aspect-ratio: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--ink);
+  font: 600 13px/1 var(--font-body);
+}
+.journey-week-card .dd.full { border-color: var(--hero-bg); background: var(--hero-bg); color: var(--hero-ink); }
+.journey-week-card .dd.part { border-color: var(--accent); background: var(--blush-soft); color: var(--ink); }
+.journey-week-card .dd.r { border: 1px dashed var(--accent); background: transparent; color: var(--accent); }
+.journey-week-card .dd.fut { opacity: .58; }
+.journey-week-card .dd.today { box-shadow: inset 0 0 0 1px var(--accent); }
+.journey-week-card .dd.sel { outline: 2px solid var(--accent); outline-offset: 2px; }
+.journey-week-summary { margin: 12px 0 0; color: var(--muted); font: 400 13px/1.4 var(--font-body); }
+.journey-focus,
+.journey-chapters,
+.journey-all-days,
+.journey-keepsake { min-width: 0; padding: 18px 0 !important; border: 0 !important; border-top: 1px solid var(--line) !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; }
+.journey-focus .dn { flex-wrap: wrap; gap: 6px; }
+.journey-focus .dn b { color: var(--ink); font: 500 14px/1.4 var(--font-body); }
+.journey-focus h2,
+.journey-chapters h2 { margin: 5px 0 8px; color: var(--ink); font: 600 24px/1.15 var(--font-display); }
+.journey-focus .note { max-width: 65ch; margin: 0 0 8px; color: var(--muted); }
+.journey-chapter-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 54px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.journey-chapter-row:last-child { border-bottom: 0; }
+.journey-chapter-row > span { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+.journey-chapter-row b { color: var(--ink); font: 500 15px/1.3 var(--font-body); }
+.journey-chapter-row small { flex: none; color: var(--muted); font: 400 12px/1.35 var(--font-body); }
+.journey-chapter-row.is-current b { color: var(--accent); }
+.journey-all-days > summary { min-height: 44px; color: var(--muted); font: 500 14px/1.4 var(--font-body); cursor: pointer; }
+.journey-all-days .map { display: grid; grid-template-columns: 1fr; gap: 12px; padding-top: 12px; }
+.journey-all-days .ms { min-width: 0; margin: 0; padding: 12px 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }
+.journey-all-days .ms h3 { margin: 3px 0; color: var(--ink); font: 600 19px/1.2 var(--font-display); }
+.journey-all-days .ms p { margin: 0; color: var(--muted); }
+.journey-all-days .dgrid { grid-template-columns: repeat(7, minmax(34px, 1fr)); gap: 6px; }
+.journey-focus .note { padding: 0; border: 0; border-radius: 0; background: transparent; }
+.journey-habits > details.card { padding: 10px 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }
+.journey-habits > details.card:last-child { border-bottom: 0; }
+
+/* Activity: recommendations are rows; selection and filtering are action surfaces. */
+.activity-recommendations { min-width: 0; padding: 8px 0 16px; }
+.activity-recommendations-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.activity-recommendations-header h2 { margin: 3px 0 0; color: var(--ink); font: 600 25px/1.15 var(--font-display); }
+.activity-rec-list { min-width: 0; }
+.activity-rec-list .fxc { margin: 0; overflow: visible; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; }
+.activity-rec-list .fxc.on { border-color: var(--line); background: transparent; box-shadow: none; }
+.activity-rec-list .fx-zigzag,
+.activity-rec-list .fxc:nth-child(even) .fx-zigzag { display: block; width: 100%; min-height: 64px; padding: 10px 0; border: 0; background: transparent; text-align: left; }
+.activity-rec-list .fx-art { display: none; }
+.activity-rec-list .fx-info small { color: var(--muted); font: 600 10px/1.4 var(--font-body); letter-spacing: .08em; }
+.activity-rec-list .fx-info b { margin: 3px 0; color: var(--ink); font: 500 17px/1.25 var(--font-body); }
+.activity-rec-list .fx-info span { color: var(--muted); font: 400 12px/1.35 var(--font-body); }
+.activity-rec-list .fxc-body { margin: 0 0 12px; padding: 14px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+.activity-rec-list .fxc-body .row { flex-wrap: wrap; gap: 8px; }
+.activity-controls-card { margin-top: 14px; padding: 12px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+body[data-active-tab="act"] #main .activity-filters { margin: 0; padding: 16px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); box-shadow: none; }
+body[data-active-tab="act"] #main .activity-filters .boutique-hdr { border: 0; margin-bottom: 8px; padding: 0; }
+.activity-content[data-activity-view="sk"] > .tier-quiet,
+.activity-content[data-activity-view="po"] > .tier-quiet:has(textarea) { padding: 16px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+.activity-content .vanity-grid,
+.activity-content .lookbook-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+
+/* Diary: the journal and reading controls are cards; book details remain rows. */
+body[data-active-tab="diary"] #main > .diary-entry { margin: 0; }
+body[data-active-tab="diary"] #main > .diary-reading-summary,
+body[data-active-tab="diary"] #main > .diary-reading-controls,
+body[data-active-tab="diary"] #main > .diary-reading-list { order: 4; }
+.diary-reading-summary,
+.diary-reading-list,
+.diary-jar,
+.diary-wardrobe,
+.diary-archive { min-width: 0; padding: 16px 0 !important; border: 0 !important; border-top: 1px solid var(--line) !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; }
+.diary-reading-summary .boutique-hdr,
+.diary-reading-list .boutique-hdr { margin: 0 0 8px; padding: 0 0 8px; border-bottom: 1px solid var(--line); }
+.diary-reading-summary .bk-top { grid-template-columns: 1fr; gap: 0; margin: 0; }
+.diary-reading-summary .bk-top > svg { display: none; }
+.diary-reading-summary .bk-top h3 { margin: 4px 0 0; color: var(--ink); font: 600 23px/1.2 var(--font-display); }
+.diary-reading-summary .rrow { margin: 10px 0 4px; }
+.diary-reading-summary .rbar { height: 4px; border: 0; background: var(--line); }
+.diary-reading-summary .rbar > i { background: var(--accent); }
+.diary-reading-progress { margin: 0; color: var(--muted); font: 400 12px/1.4 var(--font-body); }
+body[data-active-tab="diary"] #main > .diary-reading-controls { margin: 0; }
+.diary-reading-controls > .chips { gap: 6px; }
+.diary-reading-list .bk-item { min-width: 0; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.diary-reading-list .bk-item:last-of-type { border-bottom: 0; }
+.diary-reading-list .bk-item > div:first-child { min-width: 0; }
+.diary-reading-list .bk-item b { color: var(--ink); font: 500 15px/1.3 var(--font-body); }
+.diary-reading-list .bk-item .row { flex-wrap: wrap; }
+.diary-reading-add { margin-top: 10px; padding: 10px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); }
+.diary-reading-add .btn { width: 100%; }
+.diary-wardrobe .ed-table { background: transparent !important; border-radius: 0 !important; padding: 0 !important; }
+
+/* Profile metrics are quiet; only editable settings and backup groups keep cards. */
+body[data-active-tab="me"] #main > .profile-aura { margin: 0; padding: 8px 0 16px; border: 0; border-radius: 0; background: transparent; color: var(--ink); box-shadow: none; }
+.profile-aura-content { min-width: 0; }
+.profile-aura-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.profile-aura-heading .home-text-action { flex: none; }
+.profile-aura-list { display: block; }
+.profile-aura .boutique-hdr { margin: 0; padding: 0 0 8px; border: 0; background: transparent; }
+.profile-aura .boutique-hdr-title,
+.profile-aura .aura-name,
+.profile-aura .aura-score { color: var(--ink); }
+.profile-aura-list .aura-row { grid-template-columns: minmax(105px, 1fr) minmax(40px, 1.8fr) 38px; gap: 10px; min-height: 40px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.profile-aura-list .aura-name { min-width: 0; overflow-wrap: anywhere; font: 500 12px/1.25 var(--font-body); letter-spacing: 0; text-transform: none; }
+.profile-aura-list .aura-score { font: 400 12px/1.3 var(--font-body); }
+.aura-meter { display: block; height: 4px; overflow: hidden; border-radius: 99px; background: var(--line); }
+.aura-meter i { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
+body[data-active-tab="me"] #main .profile-preferences,
+body[data-active-tab="me"] #main .profile-backup,
+body[data-active-tab="me"] #main .profile-schedule > .card { margin: 0; }
+.profile-preferences .row,
+.profile-backup .row { align-items: stretch; gap: 8px; }
+.profile-preferences .row > *,
+.profile-backup .row > * { flex: 1 1 180px; }
+
+@media (min-width: 1024px) {
+  .journey-week-card .dgrid { gap: 8px; }
+  .journey-chapters { max-width: 100%; }
+  .profile-aura-list .aura-row { grid-template-columns: minmax(105px, 1fr) minmax(50px, 1.8fr) 40px; }
+}
+
+@media (max-width: 380px) {
+  body[data-active-tab="journey"] #main > .journey-week-card { padding: 12px; }
+  .journey-week-card .dgrid { gap: 4px; }
+  .journey-week-card .dd { min-height: 42px; border-radius: 9px; }
+  .journey-chapter-row { gap: 8px; }
+  .activity-recommendations-header { align-items: flex-start; }
+  .profile-aura-list .aura-row { grid-template-columns: minmax(90px, 1fr) minmax(38px, 1.4fr) 34px; gap: 6px; }
+}

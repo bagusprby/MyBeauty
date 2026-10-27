@@ -354,8 +354,7 @@ function renderNookMini() {
 }
 function renderNookCard() {
   const B = S.books, c = B.cur, st = bookStreak(), done = !!B.days[ymd()];
-  let h = `<div class="card paper diary-nook tier-quiet">
-    <div class="washi"></div>
+  let h = `<section class="diary-reading-summary tier-quiet">
     <div class="boutique-hdr"><span class="boutique-hdr-title">My Coquette Reading Nook</span></div>
     <div class="bk-top">${ART.book}<div>
       <span class="eyebrow">📖 Sedang Dibaca · Reading Streak ${st} 🌸</span>
@@ -364,7 +363,8 @@ function renderNookCard() {
   if (c) {
     const fin = c.totalPages > 0 && (c.currentPage || 0) >= c.totalPages;
     h += `${bkBar(c)}
-    <div class="mut" style="font-size:0.82rem;margin:2px 0 6px">Halaman ${c.currentPage || 0} dari ${c.totalPages || "?"}${c.totalPages ? "" : " · atur total halaman lewat Edit"}</div>
+    <p class="diary-reading-progress">Halaman ${c.currentPage || 0} dari ${c.totalPages || "?"}${c.totalPages ? "" : " · atur total halaman lewat Edit"}</p></section>
+    <div class="card diary-reading-controls tier-primary">
     <div class="chips">
       <button class="chip on" onclick="bkAdd(1)">+1 Hal</button>
       <button class="chip on" onclick="bkAdd(5)">+5 Hal</button>
@@ -378,24 +378,24 @@ function renderNookCard() {
       <button class="${fin ? "btn" : "chip"}" onclick="bkFinish()">${fin ? "Selesai 🎀" : "Tandai Selesai"}</button>
       <button class="chip" onclick="bookSheet('cur')">✎ Edit</button>
       <button class="chip" onclick="bkDel('cur')">🗑</button>
-    </div>`;
+    </div></div>`;
   } else {
-    h += `<div class="row"><button class="btn" onclick="bkCheck()">${done ? "✓ Tercatat Hari Ini" : "✓ Sudah Baca Hari Ini"}</button></div>`;
+    h += `</section><div class="card diary-reading-controls tier-primary"><div class="row"><button class="btn" onclick="bkCheck()">${done ? "✓ Tercatat Hari Ini" : "✓ Sudah Baca Hari Ini"}</button></div></div>`;
   }
-  h += `<div class="boutique-hdr" style="margin-top:14px"><span class="boutique-hdr-title">My Reading Wishlist · TBR Shelf</span></div>`;
+  h += `<section class="diary-reading-list tier-quiet"><div class="boutique-hdr"><span class="boutique-hdr-title">My Reading Wishlist · TBR Shelf</span></div>`;
   h += B.tbr.length ? B.tbr.map(x => `<div class="bk-item">
       <div><b>${E(x.title)}</b><br><small class="mut">${E(x.author || "")}${x.totalPages ? " · " + x.totalPages + " hal" : ""}</small></div>
       <div class="row"><button class="chip on" onclick="bkStart('${x.id}')">Mulai Baca 📖</button><button class="chip" onclick="bookSheet('tbr','${x.id}')">✎</button><button class="chip" onclick="bkDel('tbr','${x.id}')">🗑</button></div>
     </div>`).join("") : `<div class="empty">Rak keinginanmu masih kosong. Tambah satu buku impian 🌸</div>`;
-  h += `<button class="btn ghost" style="margin-top:8px" onclick="bookSheet('new')">+ Tambah Buku Baru</button>`;
+  h += `<div class="card diary-reading-add"><button class="btn ghost" onclick="bookSheet('new')">+ Tambah Buku Baru</button></div>`;
   if (B.done.length) {
-    h += `<div class="boutique-hdr" style="margin-top:14px"><span class="boutique-hdr-title">Sudah Selesai Dibaca (${B.done.length})</span></div>`;
+    h += `<div class="boutique-hdr"><span class="boutique-hdr-title">Sudah Selesai Dibaca (${B.done.length})</span></div>`;
     h += B.done.map(x => `<div class="bk-item" style="display:block">
       <div class="row" style="justify-content:space-between"><span><b>✓ ${E(x.title)}</b> <small class="mut">${E(x.author || "")}</small></span><button class="chip" onclick="bkDel('done','${x.id}')">🗑</button></div>
       <textarea rows="2" placeholder="Kutipan favoritku..." onchange="bkDoneQuote('${x.id}',this.value)">${E(x.quote)}</textarea>
     </div>`).join("");
   }
-  return h + `</div>`;
+  return h + `</section>`;
 }
 
 /* ===== NEW: Ilustrasi vintage coquette beranimasi pengganti foto yang gagal dimuat ===== */
@@ -642,16 +642,15 @@ function renderHeartBar(val) {
 
 function renderAuraCard(compact = false) {
   const auras = calcAura();
-  return `<div class="card paper">
-    <div class="washi"></div>
-    <div class="boutique-hdr">
-      <span class="boutique-hdr-title">My Era Stats &amp; Aura</span>
-      <button class="chip on" onclick="openRecapCardModal()">📸 Cetak Poster Edisi</button>
+  return `<div class="profile-aura-content">
+    <div class="profile-aura-heading">
+      <span class="eyebrow">My Era Stats &amp; Aura</span>
+      <button class="home-text-action" onclick="openRecapCardModal()">📸 Cetak Poster Edisi</button>
     </div>
-    <div>
+    <div class="profile-aura-list">
       ${auras.map(a => `<div class="aura-row">
         <span class="aura-name">${a.icon} ${E(a.name)}</span>
-        ${renderHeartBar(a.val)}
+        <span class="aura-meter" role="progressbar" aria-label="${E(a.name)}" aria-valuemin="0" aria-valuemax="10" aria-valuenow="${a.val}"><i style="width:${Math.max(0, Math.min(100, a.val * 10))}%"></i></span>
         <span class="aura-score">${a.val}/10</span>
       </div>`).join("")}
     </div>
@@ -1453,20 +1452,51 @@ function vJourney() {
   const d = sel, td = todayN();
   const s0 = x => (S.rest[x] || S.low[x] || S.rescue[x]) ? "r" : prog(x).p >= 100 ? "full" : active(x) ? "part" : x < td ? "miss" : "fut";
   const actsDone = (S.acts[d] || []).filter(a => a && a.done);
-
+  const week = wkN(d);
+  const weekStart = week === 4 && d > 28 ? 24 : (week - 1) * 7 + 1;
+  const weekEnd = Math.min(30, weekStart + 6);
+  const weekDays = Array.from({ length: weekEnd - weekStart + 1 }, (_, i) => weekStart + i);
+  const dayButton = x => {
+    const s = s0(x);
+    return `<button class="dd ${s} ${x == td ? "today" : ""} ${x == d ? "sel" : ""}" onclick="setSel(${x})" aria-label="Pilih Hari ${x}">${s == "full" ? ico("ck", 12) : s == "r" ? ico("rest", 11) : x}</button>`;
+  };
+  const phaseRow = p => {
+    const count = Array.from({ length: p[1] - p[0] + 1 }, (_, i) => p[0] + i).filter(active).length;
+    return `<div class="journey-chapter-row ${d >= p[0] && d <= p[1] ? "is-current" : ""}"><span><b>${E(p[2])}</b><small>Hari ${p[0]}–${p[1]} · ${count}/${p[1] - p[0] + 1} Hari Hadir</small></span></div>`;
+  };
+  const fullWeek = weekDays.filter(x => s0(x) === "full").length;
+  const restWeek = weekDays.filter(x => !!S.rest[x]).length;
   let h = `<header class="screen-heading">
     <span class="eyebrow">The 30-Day Chronicle · Hari ${d} · ${dateOf(d)}</span>
     <h1>My Glow Up Era</h1>
     <p>Setiap ritual, paket salon mandi, jurnal, dan istirahatmu tercatat di sini.</p>
   </header>
-  <section class="journey-map tier-primary" aria-label="Peta perjalanan 30 hari"><div class="map">`;
-
+  <section class="journey-week-card tier-primary" aria-label="Hari dalam minggu ${week}">
+    <span class="eyebrow">MINGGU ${week} · ${E(phase(d)[2].replace(/^Chapter [IVX]+ · /, ""))}</span>
+    <div class="dgrid">${weekDays.map(dayButton).join("")}</div>
+    <p class="journey-week-summary">${fullWeek} hari penuh · ${restWeek} hari istirahat</p>
+  </section>
+  <section class="journey-focus tier-quiet">
+    ${dayNav()}
+    <span class="eyebrow">Fokus Hari ${d}:</span>
+    <h2>“${E(F[d - 1])}”</h2>
+    <p class="note">${E(NOTES[(d * 3) % NOTES.length])}</p>
+    ${REW[d] ? `<p class="note"><b>Milestone Hari ${d}:</b> ${E(REW[d])}</p>` : ""}
+    ${actsDone.length ? `<p class="mut journey-activity-summary">Aktivitas yang dinikmati: <b>${actsDone.map(a => E(a.a)).join(", ")}</b></p>` : ""}
+  </section>
+  <section class="journey-chapters tier-quiet" aria-label="Empat chapter perjalanan">
+    <span class="eyebrow">30 HARI · 4 CHAPTER</span>
+    <h2>Chapter</h2>
+    ${PHASES.map(phaseRow).join("")}
+  </section>
+  <details class="journey-all-days tier-quiet">
+    <summary>Lihat peta lengkap 30 hari</summary><div class="map">
+  `;
   PHASES.forEach((p, i) => {
     let hit = 0, b = "";
     for (let x = p[0]; x <= p[1]; x++) {
       if (active(x)) hit++;
-      const s = s0(x);
-      b += `<button class="dd ${s} ${x == td ? "today" : ""} ${x == d ? "sel" : ""}" onclick="setSel(${x})">${s == "full" ? ico("ck", 12) : s == "r" ? ico("rest", 11) : x}</button>`;
+      b += dayButton(x);
     }
     h += `<div class="ms">
       <span class="eyebrow">Hari ${p[0]}–${p[1]} · ${hit}/${p[1] - p[0] + 1} Hari Hadir</span>
@@ -1476,15 +1506,7 @@ function vJourney() {
     </div>`;
   });
 
-  return h + `</div></section>
-  <section class="journey-focus tier-primary"><div class="card">
-    ${dayNav()}
-    <span class="eyebrow">${E(phase(d)[2])}</span>
-    <h3 style="margin-top:2px">Fokus Hari ${d}: “${E(F[d - 1])}”</h3>
-    <p class="note">${E(NOTES[(d * 3) % NOTES.length])}</p>
-    ${REW[d] ? `<p class="note"><b>Milestone Hari ${d}:</b> ${E(REW[d])}</p>` : ""}
-    ${actsDone.length ? `<p class="mut journey-activity-summary">Aktivitas yang dinikmati: <b>${actsDone.map(a => E(a.a)).join(", ")}</b></p>` : ""}
-  </div></section>
+  return h + `</div></details>
   <section class="journey-habits tier-primary" aria-label="Kebiasaan hari terpilih">${allList(d)}</section>
   <section class="journey-keepsake tier-quiet">${renderJarCard("journey-jar tier-quiet")}</section>`;
 }
@@ -1733,31 +1755,26 @@ function vFx() {
   const favIds = Object.keys(fxS().fav).map(Number);
 
   if (fx.showFav) {
-    return `<div class="card paper activity-primary">
-      <div class="mh"><div><span class="eyebrow">Saved Collection</span><h3>Koleksi Favoritku (${favIds.length})</h3></div><button class="chip" onclick="fx.showFav=false;render()">← Kembali</button></div>
-      ${favIds.length ? favIds.map((i, k) => fxCard(i, k % 3)).join("") : '<div class="empty">Belum ada favorit tersimpan.</div>'}
-    </div>`;
+    return `<section class="activity-recommendations activity-favorites">
+      <div class="activity-recommendations-header"><div><span class="eyebrow">Saved Collection</span><h2>Koleksi Favoritku (${favIds.length})</h2></div><button class="chip" onclick="fx.showFav=false;render()">← Kembali</button></div>
+      <div class="activity-rec-list">${favIds.length ? favIds.map((i, k) => fxCard(i, k % 3)).join("") : '<div class="empty">Belum ada favorit tersimpan.</div>'}</div>
+    </section>`;
   }
 
-  let h = `<div class="coq-frame activity-primary">
-    <div class="coq-inner">
-      <div class="mh">
-        <div>
-          <span class="eyebrow">The Art of Coquette · Lookbook</span>
-          <h2 class="script" style="font-size:2rem;margin:0">Curated Activities</h2>
-        </div>
+  let h = `<section class="activity-recommendations">
+      <div class="activity-recommendations-header">
+        <div><span class="eyebrow">The Art of Coquette · Lookbook</span><h2>Curated Activities</h2></div>
         <button class="chip" onclick="fx.showFav=true;render()">♥ Favorit (${favIds.length})</button>
       </div>
       ${fx.note ? `<p class="note">${E(fx.note)}</p>` : ""}
-      ${fx.picks.map((i, k) => fxCard(i, k)).join("")}
-      <div class="row" style="margin-top:10px">
+      <div class="activity-rec-list">${fx.picks.map((i, k) => fxCard(i, k)).join("")}</div>
+      <div class="card activity-controls-card"><div class="row">
         <button class="btn ghost" onclick="fxRoll(1)">↻ Putar 3 Pilihan Baru</button>
         <button class="btn" onclick="fxSur()">✨ Surprise Me</button>
-      </div>
-    </div>
-  </div>`;
+      </div></div>
+  </section>`;
 
-  h += `<div class="card activity-filters tier-quiet">
+  h += `<div class="card activity-filters tier-primary">
     <div class="boutique-hdr"><span class="boutique-hdr-title">Vibe &amp; Category Filter</span></div>
     <div class="sg" style="margin-bottom:10px">
       ${STN.map((s, i) => `<button class="opt" onclick="fxPreset(${i})"><span>${s[0]}</span></button>`).join("")}
@@ -2413,7 +2430,7 @@ function vMe() {
     <nav class="profile-tabs" aria-label="Bagian profil">${SEG([["kol", "Keepsakes"], ["jd", "Jadwal & KRS"], ["pg", "Pengaturan"]], sP, "sP")}</nav>`;
   if (sP == "kol") {
     const all = ACH.map(a => [a[0], a[1], a[2], a[4]]).concat(PHASES.map((p, i) => ["m" + i, p[2], "Hadir di " + (i == 3 ? 5 : 4) + " hari atau lebih pada bab ini.", "map"]));
-    h += `<section class="profile-aura tier-hero">${renderAuraCard(false)}</section>
+    h += `<section class="profile-aura tier-quiet">${renderAuraCard(false)}</section>
     <div class="card profile-keepsakes tier-quiet">
       <div class="boutique-hdr"><span class="boutique-hdr-title">Stamp &amp; Ribbon Keepsakes</span></div>
       <div class="stamp-grid">
