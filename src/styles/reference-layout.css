@@ -157,3 +157,51 @@ body[data-active-tab="me"] #main .profile-schedule > .card { margin: 0; }
   .activity-recommendations-header { align-items: flex-start; }
   .profile-aura-list .aura-row { grid-template-columns: minmax(90px, 1fr) minmax(38px, 1.4fr) 34px; gap: 6px; }
 }
+
+/* Mobile breathing room for the Journey tab's compact controls and rows. */
+@media (max-width: 700px) {
+  body[data-active-tab="journey"] #main { gap: 14px; }
+  body[data-active-tab="journey"] #main > .journey-week-card { padding: 16px; }
+  .journey-week-card > .eyebrow { margin-bottom: 14px; line-height: 1.5; }
+  .journey-week-card .dgrid { gap: 6px; }
+  .journey-week-summary { margin-top: 14px; }
+
+  .journey-focus,
+  .journey-chapters,
+  .journey-all-days,
+  .journey-keepsake { padding-inline: 4px !important; }
+  .journey-focus .day-nav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .journey-focus .day-nav > button { min-width: 0; padding-inline: 8px; white-space: nowrap; }
+  .journey-focus .day-nav > button:first-child { justify-self: start; }
+  .journey-focus .day-nav > button:last-child { justify-self: end; }
+  .journey-focus .day-nav > b { text-align: center; }
+  .journey-focus > .eyebrow { display: block; margin-bottom: 4px; line-height: 1.5; }
+  .journey-focus h2,
+  .journey-chapters h2 { margin-block: 8px 12px; }
+  .journey-focus .note { margin-bottom: 12px; line-height: 1.55; }
+  .journey-focus .journey-activity-summary { margin: 12px 0 0; line-height: 1.5; }
+
+  .journey-chapter-row { gap: 12px; min-height: 60px; padding-block: 10px; }
+  .journey-chapter-row > span { gap: 4px; }
+  .journey-chapter-row small { white-space: normal; text-align: right; }
+  .journey-all-days > summary { padding-block: 8px; }
+  .journey-all-days .map { gap: 16px; padding-top: 16px; }
+  .journey-all-days .dgrid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+  .journey-habits > details { padding-block: 14px; }
+  .journey-habits summary { display: flex; align-items: center; gap: 10px; line-height: 1.4; }
+  .journey-habits summary small { margin-left: auto; white-space: nowrap; }
+}
+
+@media (max-width: 360px) {
+  body[data-active-tab="journey"] #main > .journey-week-card { padding: 14px; }
+  .journey-week-card .dgrid { gap: 4px; }
+  .journey-focus .day-nav { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .journey-focus .day-nav > b { grid-column: 1 / -1; grid-row: 1; }
+  .journey-focus .day-nav > button { grid-row: 2; }
+}
