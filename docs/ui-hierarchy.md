@@ -201,4 +201,5 @@ Verifikasi Fase 4: `npm test` lulus (2 tes), `npm run build` berhasil (65 modul)
 
 - Jadwal Profil menampilkan pemilih hari horizontal, ringkasan mata kuliah terurut per waktu, lalu metadata kerja/bangun/perawatan. Form edit dipindah ke disclosure “Atur jadwal”; semua nilai dan handler lama tetap digunakan.
 - Tombol edit membuka disclosure dan status buka/tutupnya bertahan saat formulir merender ulang. Input jadwal, penghapusan, reset KRS, dan penyimpanan tetap menggunakan fungsi lama.
+- Saat memilih hari, posisi scroll horizontal strip dipertahankan ketika kartu dirender ulang sehingga pilihan hari jauh tidak melompat kembali ke Senin.
 - Perangkat sentuh mendapat animasi pop singkat saat pointer menyentuh kontrol; ikon navbar mendapat pop kecil tambahan. Efek dinonaktifkan pada `prefers-reduced-motion`.

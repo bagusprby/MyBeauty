@@ -2381,7 +2381,7 @@ function vJadwal() {
   const days = [1, 2, 3, 4, 5, 6, 0];
   const dayTabs = days.map(w => {
     const count = sc.courses.filter(c => c.day == w && vc(c)).length;
-    return `<button type="button" class="schedule-day-btn ${w == td ? "today" : ""} ${w == ed ? "sel" : ""}" onclick="ed=${w};render()" aria-pressed="${w == ed}">
+    return `<button type="button" class="schedule-day-btn ${w == td ? "today" : ""} ${w == ed ? "sel" : ""}" onclick="selectScheduleDay(${w})" aria-pressed="${w == ed}">
       <span>${NAMA[w]}</span><small>${count ? `${count} kelas` : "Kosong"}</small>
     </button>`;
   }).join("");
@@ -2421,6 +2421,17 @@ function vJadwal() {
       <button class="btn ghost big" style="margin-top:12px" onclick="ask('Kembalikan jadwal KRS awal?','Jadwal mingguan akan dikembalikan ke KRS awal.','Kembalikan',()=>{S.sch=mkSch();save();render()})">Kembalikan ke Jadwal KRS Awal</button>
     </div>
   </details>`;
+}
+
+function selectScheduleDay(day) {
+  const currentStrip = document.querySelector(".schedule-day-strip");
+  const scrollLeft = currentStrip?.scrollLeft || 0;
+  ed = Number(day);
+  render();
+  requestAnimationFrame(() => {
+    const nextStrip = document.querySelector(".schedule-day-strip");
+    if (nextStrip) nextStrip.scrollLeft = scrollLeft;
+  });
 }
 
 function setWake(v) { v ? S.sch.wake[ed] = v : delete S.sch.wake[ed]; save(); render(); }
