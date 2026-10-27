@@ -175,7 +175,7 @@ body[data-active-tab="me"] #main .profile-schedule > .card { margin: 0; }
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
     gap: 8px;
-    margin-bottom: 18px;
+    margin-bottom: 28px;
   }
   .journey-focus .day-nav > button { min-width: 0; padding-inline: 8px; white-space: nowrap; }
   .journey-focus .day-nav > button:first-child { justify-self: start; }
