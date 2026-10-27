@@ -51,6 +51,8 @@ body:not(.auth-gated) { padding-bottom: calc(92px + env(safe-area-inset-bottom, 
 }
 .nav-icon-wrap { display: grid; width: 24px; height: 23px; place-items: center; color: currentColor; }
 .nav-icon { display: block; width: 20px; height: 20px; overflow: visible; }
+/* app.css and shell.css hide descendant SVGs for the legacy icon treatment. */
+.nav button svg.nav-icon { display: block; flex: none; visibility: visible; opacity: 1; }
 .nav-label { display: block; max-width: 100%; }
 .nav button.on {
   border-color: transparent;
@@ -117,6 +119,25 @@ body:not(.auth-gated) { padding-bottom: calc(92px + env(safe-area-inset-bottom, 
 
 @media (min-width: 1024px) and (max-width: 1279px) {
   .nav { left: 16px; width: 200px; }
+}
+
+/* Keep sync feedback centered in the clear space between the page and dock. */
+.sync-indicator {
+  left: 50%;
+  right: auto;
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+@media (min-width: 1024px) {
+  .sync-indicator {
+    left: auto;
+    right: 18px;
+    bottom: 16px;
+    transform: none;
+  }
 }
 
 /* Pointer hover gives controls a small lift; touch users get a short press response. */
