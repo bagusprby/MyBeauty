@@ -513,7 +513,7 @@ function save() {
 }
 
 const todayN = () => Math.min(30, Math.max(1, Math.round((D0(new Date()) - S.start) / 864e5) + 1));
-let sel = todayN(), tab = "today", pop = null, ciOpen, allOpen = false, openCat = {}, sA = "fx", sP = "kol", ed = 1, ni = -1, mCat = "all", curVanityIdx = 0, curLookIdx = 0;
+let sel = todayN(), tab = "today", pop = null, ciOpen, allOpen = false, openCat = {}, sA = "fx", sP = "kol", ed = 1, ni = -1, mCat = "all", curVanityIdx = 0, curLookIdx = 0, scheduleEditorOpen = false;
 
 const dateOf = d => new Date(S.start + (d - 1) * 864e5).toLocaleDateString("id-ID", { weekday: "short", month: "short", day: "numeric" });
 const dow = d => new Date(S.start + (d - 1) * 864e5).getDay();
@@ -2378,37 +2378,49 @@ function planCard(d) {
 
 function vJadwal() {
   const sc = S.sch, td = new Date().getDay(), wo = S.sch.work[ed] || ["", ""];
-  const cal = [1, 2, 3, 4, 5, 6, 0].map(w => {
-    const cs = sc.courses.filter(c => c.day == w && vc(c)).sort((a, b) => tm(a.s) - tm(b.s)), x = sc.work[w];
-    return `<button class="wkd ${w == td ? "today" : ""} ${w == ed ? "sel" : ""}" onclick="ed=${w};render()">
-      <b>${NAMA[w]}${sc.bath.includes(w) ? " 🛁" : ""}</b>
-      ${cs.map(c => `<span>${fm(tm(c.s))}–${fm(tm(c.e))}<br>${E(c.n)}</span>`).join("") || '<span class="mut">Tanpa kelas kuliah</span>'}
-      ${x && x[0] ? `<span>💼 Scanlation ${fm(tm(x[0]))}–${fm(tm(x[1]))}</span>` : '<span class="mut">Kerja fleksibel</span>'}
-      <span class="mut">${sc.wake[w] ? "⏰ Bangun " + fm(tm(sc.wake[w])) : "Bangun fleksibel"}</span>
+  const days = [1, 2, 3, 4, 5, 6, 0];
+  const dayTabs = days.map(w => {
+    const count = sc.courses.filter(c => c.day == w && vc(c)).length;
+    return `<button type="button" class="schedule-day-btn ${w == td ? "today" : ""} ${w == ed ? "sel" : ""}" onclick="ed=${w};render()" aria-pressed="${w == ed}">
+      <span>${NAMA[w]}</span><small>${count ? `${count} kelas` : "Kosong"}</small>
     </button>`;
   }).join("");
+  const selectedCourses = sc.courses.filter(c => c.day == ed && vc(c)).sort((a, b) => tm(a.s) - tm(b.s));
+  const courseCards = selectedCourses.length
+    ? selectedCourses.map(c => `<article class="schedule-course-card">
+        <div class="schedule-course-heading"><span class="eyebrow">MATA KULIAH</span><h3>${E(c.n || "Mata kuliah")}</h3></div>
+        <div class="schedule-course-time"><span class="eyebrow">WAKTU</span><b>${fm(tm(c.s))} – ${fm(tm(c.e))}</b></div>
+      </article>`).join("")
+    : '<p class="schedule-empty">Belum ada mata kuliah untuk hari ini.</p>';
+  const workSummary = wo[0] ? `<span class="schedule-meta-item"><small>Kerja</small><b>${fm(tm(wo[0]))} – ${fm(tm(wo[1]))}</b></span>` : "";
+  const wakeSummary = sc.wake[ed] ? `<span class="schedule-meta-item"><small>Bangun</small><b>${fm(tm(sc.wake[ed]))}</b></span>` : "";
+  const bathSummary = sc.bath.includes(ed) ? '<span class="schedule-meta-item"><small>Perawatan</small><b>Mandi utama</b></span>' : "";
 
   const rows = sc.courses.map((c, i) => c.day == ed ? `<div class="crow"><input type="time" value="${c.s}" onchange="setC(${i},'s',this.value)"><input type="time" value="${c.e}" onchange="setC(${i},'e',this.value)"><input type="text" value="${E(c.n)}" onchange="setC(${i},'n',this.value)"><button class="chip" onclick="delC(${i})">Hapus</button></div>` : "").join("");
 
-  return `<div class="card">
-    <div class="boutique-hdr"><span class="boutique-hdr-title">Jadwal Kuliah &amp; Scanlation</span></div>
-    <div class="wkgrid">${cal}</div>
-  </div>
-  <div class="card">
-    <h3>Atur Jadwal Hari ${NAMA[ed]}</h3>
-    <label class="q">Jam bangun (kosongkan jika fleksibel)</label>
-    <input type="time" value="${sc.wake[ed] || ""}" onchange="setWake(this.value)">
-    <label class="q">Jam kerja scanlation</label>
-    <div class="crow"><input type="time" value="${wo[0]}" onchange="setWork(0,this.value)"><input type="time" value="${wo[1]}" onchange="setWork(1,this.value)"></div>
-    <label class="q">Mata Kuliah (${NAMA[ed]})</label>
-    ${rows || '<div class="empty">Tidak ada mata kuliah di hari ini.</div>'}
-    <button class="btn ghost" onclick="addC()">+ Tambah Mata Kuliah</button>
-    <label class="q">Hari Mandi Utama (Selasa, Jumat, Minggu)</label>
-    <div class="chips">${[1, 2, 3, 4, 5, 6, 0].map(w => `<button class="chip ${sc.bath.includes(w) ? "on" : ""}" onclick="bath(${w})">${NAMA[w]}</button>`).join("")}</div>
-    <label class="q">Waktu perjalanan ke kampus (menit)</label>
-    <input type="number" min="0" max="240" value="${sc.travel}" onchange="S.sch.travel=Math.max(0,+this.value||0);save();render()">
-    <button class="btn ghost big" style="margin-top:12px" onclick="ask('Kembalikan jadwal KRS awal?','Jadwal mingguan akan dikembalikan ke KRS awal.','Kembalikan',()=>{S.sch=mkSch();save();render()})">Kembalikan ke Jadwal KRS Awal</button>
-  </div>`;
+  return `<section class="card schedule-overview">
+    <div class="schedule-heading"><div><span class="eyebrow">JADWAL MINGGUAN</span><h2>${NAMA[ed]}</h2></div><button type="button" class="btn ghost schedule-edit-cta" onclick="const e=document.querySelector('.schedule-editor');if(e){e.open=true;e.scrollIntoView({behavior:'smooth',block:'start'})}">Atur jadwal</button></div>
+    <div class="schedule-day-strip" aria-label="Pilih hari">${dayTabs}</div>
+    <div class="schedule-course-list">${courseCards}</div>
+    ${(workSummary || wakeSummary || bathSummary) ? `<div class="schedule-meta">${workSummary}${wakeSummary}${bathSummary}</div>` : ""}
+  </section>
+  <details class="card schedule-editor" ${scheduleEditorOpen ? "open" : ""} ontoggle="scheduleEditorOpen=this.open">
+    <summary>Atur jadwal ${NAMA[ed]}</summary>
+    <div class="schedule-editor-content">
+      <label class="q">Jam bangun (kosongkan jika fleksibel)</label>
+      <input type="time" value="${sc.wake[ed] || ""}" onchange="setWake(this.value)">
+      <label class="q">Jam kerja scanlation</label>
+      <div class="crow"><input type="time" value="${wo[0]}" onchange="setWork(0,this.value)"><input type="time" value="${wo[1]}" onchange="setWork(1,this.value)"></div>
+      <label class="q">Mata Kuliah (${NAMA[ed]})</label>
+      ${rows || '<div class="empty">Tidak ada mata kuliah di hari ini.</div>'}
+      <button class="btn ghost" onclick="addC()">+ Tambah Mata Kuliah</button>
+      <label class="q">Hari Mandi Utama (Selasa, Jumat, Minggu)</label>
+      <div class="chips">${days.map(w => `<button class="chip ${sc.bath.includes(w) ? "on" : ""}" onclick="bath(${w})">${NAMA[w]}</button>`).join("")}</div>
+      <label class="q">Waktu perjalanan ke kampus (menit)</label>
+      <input type="number" min="0" max="240" value="${sc.travel}" onchange="S.sch.travel=Math.max(0,+this.value||0);save();render()">
+      <button class="btn ghost big" style="margin-top:12px" onclick="ask('Kembalikan jadwal KRS awal?','Jadwal mingguan akan dikembalikan ke KRS awal.','Kembalikan',()=>{S.sch=mkSch();save();render()})">Kembalikan ke Jadwal KRS Awal</button>
+    </div>
+  </details>`;
 }
 
 function setWake(v) { v ? S.sch.wake[ed] = v : delete S.sch.wake[ed]; save(); render(); }

@@ -25,6 +25,18 @@ function finishSplash() {
   setTimeout(() => splash.remove(), 280);
 }
 
+const touchPopTimers = new WeakMap();
+document.addEventListener("pointerdown", event => {
+  if (event.pointerType !== "touch" && !matchMedia("(pointer: coarse)").matches) return;
+  const button = event.target.closest("button:not(:disabled), [role='button']:not([aria-disabled='true']), a.btn");
+  if (!button || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  clearTimeout(touchPopTimers.get(button));
+  button.classList.remove("touch-pop");
+  void button.offsetWidth;
+  button.classList.add("touch-pop");
+  touchPopTimers.set(button, setTimeout(() => button.classList.remove("touch-pop"), 380));
+}, { passive: true });
+
 let repo;
 let legacyLoaded = false;
 repo = new GlowRepository(supabase, { onStatus: status => setSyncStatus(status, repo) });

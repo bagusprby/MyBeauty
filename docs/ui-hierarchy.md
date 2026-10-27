@@ -196,3 +196,9 @@ Verifikasi Fase 4: `npm test` lulus (2 tes), `npm run build` berhasil (65 modul)
 
 - Underline dihilangkan dari tombol aksi/tautan bergaya tombol. Aksi ringkasan Beranda dan pintasan kini memakai permukaan kartu ringan dengan border hairline, radius konsisten, dan hover blush; aksi check-in memakai badge pill.
 - Tombol video panduan dan kontrol `.lk` memakai treatment tanpa underline yang jelas sebagai kontrol interaktif.
+
+## Fase 9 — jadwal dan umpan balik sentuh
+
+- Jadwal Profil menampilkan pemilih hari horizontal, ringkasan mata kuliah terurut per waktu, lalu metadata kerja/bangun/perawatan. Form edit dipindah ke disclosure “Atur jadwal”; semua nilai dan handler lama tetap digunakan.
+- Tombol edit membuka disclosure dan status buka/tutupnya bertahan saat formulir merender ulang. Input jadwal, penghapusan, reset KRS, dan penyimpanan tetap menggunakan fungsi lama.
+- Perangkat sentuh mendapat animasi pop singkat saat pointer menyentuh kontrol; ikon navbar mendapat pop kecil tambahan. Efek dinonaktifkan pada `prefers-reduced-motion`.
